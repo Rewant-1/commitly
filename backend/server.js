@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import {v2 as cloudinary} from "cloudinary";  
 import postRoutes from "./routes/post.route.js";
+import notificationRoutes from "./routes/notification.route.js";
  
 const app= express();
 app.use(express.json()); //to parse req.body
@@ -10,6 +11,7 @@ import connectMongoDb from "./db/connectMongoDb.js";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
+import Notification from "./models/notification.model.js";
 dotenv.config();
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -19,6 +21,7 @@ app.use(cookieParser()); //to parse cookies
 app.use("/api/auth",authRoutes);
 app.use("/api/users",userRoutes);
 app.use("/api/posts",postRoutes);
+app.use('/api/notifications',notificationRoutes)
 console.log(process.env.MONGO_URI);
 const PORT=process.env.PORT || 5000;
  //to parse urlencoded data
