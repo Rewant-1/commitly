@@ -11,12 +11,13 @@ import { useQuery } from '@tanstack/react-query';
 import LoadingSpinner from './components/svgs/common/LoadingSpinner';
 
 function App() {
-  const {data:authUser,isLoading,error,isError}=useQuery({
+  const {data:authUser,isLoading}=useQuery({
     queryKey: ['authUser'],
     queryFn: async () => {
       try{
       const res = await fetch('/api/auth/me');
       const data= await res.json();
+      if(data.error) return null; // Handle the case where the user is not authenticated
       if (!res.ok) {
         throw new Error('Failed to fetch user data');
       }
@@ -26,14 +27,16 @@ function App() {
       throw new Error(error); // Return null or handle the error as needed
     }
     
-  },});
+  },
+retry: false, });
   if (isLoading) {
     return (<div className='h-screen flex justify-center items-center'><LoadingSpinner size='lg' /></div>)
   }
+  console.log( authUser);
   return (
     <div className="max-w-screen-lg mx-auto">
       <div className="flex">
-        <Sidebar />
+        {authUser && <Sidebar />}
         <Routes>
           <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
           <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
@@ -41,7 +44,7 @@ function App() {
           <Route path="/notifications" element={authUser ? <NotificationPage /> : <Navigate to="/login" />} />
           <Route path="/profile/:username" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
         </Routes>
-        <RightPanel />
+        {authUser && <RightPanel />}
         <Toaster />
       </div>
     </div>
