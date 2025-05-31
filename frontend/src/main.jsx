@@ -7,7 +7,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
 const queryClient = new QueryClient({
   defaultOptions:{
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,//check if this is needed
   }
 });
 createRoot(document.getElementById('root')).render(

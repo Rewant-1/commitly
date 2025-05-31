@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 import Posts from "../components/svgs/common/Posts.jsx";
 import CreatePost from "./CreatePost.jsx";
 
@@ -37,7 +38,7 @@ const HomePage = () => {
 				<CreatePost />
 
 				{/* POSTS */}
-				<Posts />
+				<Posts feedType={feedType}/>
 			</div>
 		</>
 	);
