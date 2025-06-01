@@ -5,7 +5,7 @@ import postRoutes from "./routes/post.route.js";
 import notificationRoutes from "./routes/notification.route.js";
  
 const app= express();
-app.use(express.json()); //to parse req.body
+app.use(express.json({limit:"5mb"})); //to parse req.body
 app.use(express.urlencoded({extended:true}));
 import connectMongoDb from "./db/connectMongoDb.js";
 import dotenv from "dotenv";
