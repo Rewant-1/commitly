@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+
 import Posts from "../../components/svgs/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
 import EditProfileModal from "./EditProfileModal";
 import { POSTS } from "../../utils/db/dummy.js";
+
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
@@ -12,8 +14,12 @@ import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { formatMemberSinceDate } from "../../utils/date/index.js";
+import useFollow from "../../hooks/useFollow.js";
+
+import useUpdateUserProfile from "../../hooks/useUpdateUserProfile.jsx";
 
 const ProfilePage = () => {
+	
 	useQuery({
 		queryKey: ["authUser"],})
 	const [coverImg, setCoverImg] = useState(null);
@@ -24,7 +30,11 @@ const ProfilePage = () => {
 	const profileImgRef = useRef(null);
 	const {username}= useParams();
 
-	const isMyProfile = true;
+	const {follow,isPending}=useFollow()
+	
+	const {data:authUser}= useQuery({
+		queryKey: ["authUser"]});
+
 	
 const {data:user,isLoading,refetch,isRefetching} = useQuery({
 		queryKey: ["userProfile"],
@@ -40,7 +50,16 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 				throw new Error(error || "Failed to fetch user profile");
 			}
 		}});
+
+	const { updateProfile, isUpdatingProfile } = useUpdateUserProfile();
+
+	const isMyProfile = authUser._id=== user?._id;
+
+
 	const memberSinceDate = formatMemberSinceDate(user?.createdAt);
+
+	const amIFollowing = authUser?.following?.includes(user?._id);
+
 	const handleImgChange = (e, state) => {
 		const file = e.target.files[0];
 		if (file) {
@@ -121,21 +140,29 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 								</div>
 							</div>
 							<div className='flex justify-end px-4 mt-5'>
-								{isMyProfile && <EditProfileModal />}
+								{isMyProfile && <EditProfileModal authUser={authUser} />}
 								{!isMyProfile && (
 									<button
 										className='btn btn-outline rounded-full btn-sm'
-										onClick={() => alert("Followed successfully")}
+										onClick={() => follow(user?._id)}
 									>
-										Follow
+										{isPending && amIFollowing && "Unfollow"}
+										{!isPending && !amIFollowing && "Follow"}
 									</button>
 								)}
 								{(coverImg || profileImg) && (
 									<button
 										className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
-										onClick={() => alert("Profile updated successfully")}
+										onClick={async() =>{
+											await updateProfile({
+												coverImg,
+												profileImg
+											})
+											setCoverImg(null);
+											setProfileImg(null);
+										} }
 									>
-										Update
+										{isUpdatingProfile ? "Updating..." : "Update"}
 									</button>
 								)}
 							</div>
@@ -165,16 +192,16 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 									)}
 									<div className='flex gap-2 items-center'>
 										<IoCalendarOutline className='w-4 h-4 text-slate-500' />
-										<span className='text-sm text-slate-500'>{memberSinceDate(user?.createdAt)}</span>
+										<span className='text-sm text-slate-500'>{memberSinceDate}</span>
 									</div>
 								</div>
 								<div className='flex gap-2'>
 									<div className='flex gap-1 items-center'>
-										<span className='font-bold text-xs'>{user?.following.length}</span>
+										<span className='font-bold text-xs'>{user?.following?.length}</span>
 										<span className='text-slate-500 text-xs'>Following</span>
 									</div>
 									<div className='flex gap-1 items-center'>
-										<span className='font-bold text-xs'>{user?.followers.length}</span>
+										<span className='font-bold text-xs'>{user?.followers?.length}</span>
 										<span className='text-slate-500 text-xs'>Followers</span>
 									</div>
 								</div>
