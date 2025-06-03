@@ -45,23 +45,23 @@ const RightPanel = () => {
 						suggestedUsers?.map((user) => (
 							<Link
 								to={`/profile/${user.username}`}
-								className='flex items-center justify-between gap-4'
+								className='flex items-center justify-between gap-2'
 								key={user._id}
 							>
-								<div className='flex gap-2 items-center'>
-									<div className='avatar'>
+								<div className='flex gap-2 items-center min-w-0'>
+									<div className='avatar flex-shrink-0'>
 										<div className='w-8 rounded-full'>
-											<img src={user.profileImg || "/avatar-placeholder.png"} />
+											<img src={user.profileImg || "/avatar-placeholder.jpg"} />
 										</div>
 									</div>
-									<div className='flex flex-col'>
-										<span className='font-semibold tracking-tight truncate w-28'>
+									<div className='flex flex-col min-w-0'>
+										<span className='font-semibold tracking-tight truncate'>
 											{user.fullName}
 										</span>
-										<span className='text-sm text-slate-500'>@{user.username}</span>
+										<span className='text-sm text-slate-500 truncate'>@{user.username}</span>
 									</div>
 								</div>
-								<div>
+								<div className='flex-shrink-0'>
 									<button
 										className='btn bg-white text-black hover:bg-white hover:opacity-90 rounded-full btn-sm'
 										onClick={(e) => {
