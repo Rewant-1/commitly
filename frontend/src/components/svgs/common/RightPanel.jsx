@@ -25,14 +25,13 @@ const RightPanel = () => {
 
 	const { follow, isPending } = useFollow();
 
-	if (suggestedUsers?.length === 0) return <div className='md:w-64 w-0'></div>;
+	if (suggestedUsers?.length === 0) return <div className='w-96'></div>;
 
 	return (
-		<div className='hidden lg:block my-4 mx-2'>
-			<div className='bg-[#16181C] p-4 rounded-md sticky top-2'>
-				<p className='font-bold'>Who to follow</p>
-				<div className='flex flex-col gap-4'>
-					{/* item */}
+		<div className='hidden lg:block w-96 px-4'>
+			<div className='bg-[#16181C] rounded-xl p-4 space-y-4 sticky top-2'>
+				<h3 className='text-white text-lg font-bold'>Who to follow</h3>
+				<div className='space-y-4'>
 					{isLoading && (
 						<>
 							<RightPanelSkeleton />
@@ -45,36 +44,37 @@ const RightPanel = () => {
 						suggestedUsers?.map((user) => (
 							<Link
 								to={`/profile/${user.username}`}
-								className='flex items-center justify-between gap-2'
+								className='flex justify-between items-center'
 								key={user._id}
 							>
-								<div className='flex gap-2 items-center min-w-0'>
-									<div className='avatar flex-shrink-0'>
-										<div className='w-8 rounded-full'>
-											<img src={user.profileImg || "/avatar-placeholder.jpg"} />
-										</div>
+								<div className='flex items-center gap-3 w-[240px]'>
+									<div className='w-12 h-12 rounded-full overflow-hidden flex-shrink-0'>
+										<img 
+											src={user.profileImg || "/avatar-placeholder.jpg"} 
+											alt="Avatar" 
+											className='w-full h-full object-cover'
+										/>
 									</div>
-									<div className='flex flex-col min-w-0'>
-										<span className='font-semibold tracking-tight truncate'>
+									<div className='min-w-0 flex-1'>
+										<h4 className='text-sm font-semibold text-white truncate'>
 											{user.fullName}
-										</span>
-										<span className='text-sm text-slate-500 truncate'>@{user.username}</span>
+										</h4>
+										<p className='text-sm text-gray-500 truncate'>@{user.username}</p>
 									</div>
 								</div>
-								<div className='flex-shrink-0'>
-									<button
-										className='btn bg-white text-black hover:bg-white hover:opacity-90 rounded-full btn-sm'
-										onClick={(e) => {
-											e.preventDefault();
-											follow(user._id);
-										}}
-									>
-										{isPending ? <LoadingSpinner size='sm' /> : "Follow"}
-									</button>
-								</div>
+								<button
+									className='bg-white text-black text-sm font-semibold px-5 py-1.5 rounded-full border border-gray-300 hover:bg-gray-100 flex-shrink-0'
+									onClick={(e) => {
+										e.preventDefault();
+										follow(user._id);
+									}}
+								>
+									{isPending ? <LoadingSpinner size='sm' /> : "Follow"}
+								</button>
 							</Link>
 						))}
 				</div>
+				<p className='text-sm text-blue-500 hover:underline cursor-pointer'>Show more</p>
 			</div>
 		</div>
 	);

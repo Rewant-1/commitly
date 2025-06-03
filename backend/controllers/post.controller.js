@@ -113,12 +113,15 @@ export const likeUnlikePost = async (req, res) => {
 			await User.updateOne({ _id: userId }, { $push: { likedPosts: postId } });
 			await post.save();
 
-			const notification = new Notification({
-				from: userId,
-				to: post.user,
-				type: "like",
-			});
-			await notification.save();
+			// Only create notification if the user is not liking their own post
+			if (post.user.toString() !== userId.toString()) {
+				const notification = new Notification({
+					from: userId,
+					to: post.user,
+					type: "like",
+				});
+				await notification.save();
+			}
 
 			const updatedLikes = post.likes;
 			res.status(200).json(updatedLikes);
