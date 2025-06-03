@@ -1,42 +1,41 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import Posts from "../../components/svgs/common/Posts.jsx";
+import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton.jsx";
+import EditProfileModal from "./EditProfileModal.jsx";
 
-import Posts from "../../components/svgs/common/Posts";
-import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
-import EditProfileModal from "./EditProfileModal";
 import { POSTS } from "../../utils/db/dummy.js";
-
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
-import { formatMemberSinceDate } from "../../utils/date/index.js";
-import useFollow from "../../hooks/useFollow.js";
+import { formatMemberSinceDate } from "../../utils/date";
 
+import useFollow from "../../hooks/useFollow.jsx";
 import useUpdateUserProfile from "../../hooks/useUpdateUserProfile.jsx";
 
 const ProfilePage = () => {
-	
-	useQuery({
-		queryKey: ["authUser"],})
 	const [coverImg, setCoverImg] = useState(null);
 	const [profileImg, setProfileImg] = useState(null);
 	const [feedType, setFeedType] = useState("posts");
 
 	const coverImgRef = useRef(null);
 	const profileImgRef = useRef(null);
-	const {username}= useParams();
 
-	const {follow,isPending}=useFollow()
-	
-	const {data:authUser}= useQuery({
-		queryKey: ["authUser"]});
+	const { username } = useParams();
 
-	
-const {data:user,isLoading,refetch,isRefetching} = useQuery({
+	const { follow, isPending } = useFollow();
+	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+
+	const {
+		data: user,
+		isLoading,
+		refetch,
+		isRefetching,
+	} = useQuery({
 		queryKey: ["userProfile"],
 		queryFn: async () => {
 			try {
@@ -47,18 +46,16 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 				}
 				return data;
 			} catch (error) {
-				throw new Error(error || "Failed to fetch user profile");
+				throw new Error(error);
 			}
-		}});
+		},
+	});
 
-	const { updateProfile, isUpdatingProfile } = useUpdateUserProfile();
+	const { isUpdatingProfile, updateProfile } = useUpdateUserProfile();
 
-	const isMyProfile = authUser._id=== user?._id;
-
-
+	const isMyProfile = authUser._id === user?._id;
 	const memberSinceDate = formatMemberSinceDate(user?.createdAt);
-
-	const amIFollowing = authUser?.following?.includes(user?._id);
+	const amIFollowing = authUser?.following.includes(user?._id);
 
 	const handleImgChange = (e, state) => {
 		const file = e.target.files[0];
@@ -71,16 +68,16 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 			reader.readAsDataURL(file);
 		}
 	};
+
 	useEffect(() => {
-		refetch()},
-		[username, refetch]);
-	
+		refetch();
+	}, [username, refetch]);
 
 	return (
 		<>
 			<div className='flex-[4_4_0]  border-r border-gray-700 min-h-screen '>
 				{/* HEADER */}
-				{(isLoading && isRefetching) &&<ProfileHeaderSkeleton />}
+				{(isLoading || isRefetching) && <ProfileHeaderSkeleton />}
 				{!isLoading && !isRefetching && !user && <p className='text-center text-lg mt-4'>User not found</p>}
 				<div className='flex flex-col'>
 					{!isLoading && !isRefetching && user && (
@@ -146,21 +143,19 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 										className='btn btn-outline rounded-full btn-sm'
 										onClick={() => follow(user?._id)}
 									>
-										{isPending && amIFollowing && "Unfollow"}
+										{isPending && "Loading..."}
+										{!isPending && amIFollowing && "Unfollow"}
 										{!isPending && !amIFollowing && "Follow"}
 									</button>
 								)}
 								{(coverImg || profileImg) && (
 									<button
 										className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
-										onClick={async() =>{
-											await updateProfile({
-												coverImg,
-												profileImg
-											})
-											setCoverImg(null);
+										onClick={async () => {
+											await updateProfile({ coverImg, profileImg });
 											setProfileImg(null);
-										} }
+											setCoverImg(null);
+										}}
 									>
 										{isUpdatingProfile ? "Updating..." : "Update"}
 									</button>
@@ -185,7 +180,8 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 													rel='noreferrer'
 													className='text-sm text-blue-500 hover:underline'
 												>
-													youtube.com/@asaprogrammer_
+													{/* Updated this after recording the video. I forgot to update this while recording, sorry, thx. */}
+													{user?.link}
 												</a>
 											</>
 										</div>
@@ -197,11 +193,11 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 								</div>
 								<div className='flex gap-2'>
 									<div className='flex gap-1 items-center'>
-										<span className='font-bold text-xs'>{user?.following?.length}</span>
+										<span className='font-bold text-xs'>{user?.following.length}</span>
 										<span className='text-slate-500 text-xs'>Following</span>
 									</div>
 									<div className='flex gap-1 items-center'>
-										<span className='font-bold text-xs'>{user?.followers?.length}</span>
+										<span className='font-bold text-xs'>{user?.followers.length}</span>
 										<span className='text-slate-500 text-xs'>Followers</span>
 									</div>
 								</div>
@@ -229,7 +225,7 @@ const {data:user,isLoading,refetch,isRefetching} = useQuery({
 						</>
 					)}
 
-					<Posts feedType={feedType} username={username} userId={user?._id}/>
+					<Posts feedType={feedType} username={username} userId={user?._id} />
 				</div>
 			</div>
 		</>
