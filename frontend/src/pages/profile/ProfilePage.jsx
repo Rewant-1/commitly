@@ -28,7 +28,22 @@ const ProfilePage = () => {
 	const { username } = useParams();
 
 	const { follow, isPending } = useFollow();
-	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+	const { data: authUser } = useQuery({ 
+		queryKey: ["authUser"],
+		queryFn: async () => {
+			try {
+				const res = await fetch("/api/auth/me");
+				const data = await res.json();
+				if (data.error) return null;
+				if (!res.ok) {
+					throw new Error(data.error || "Something went wrong");
+				}
+				return data;
+			} catch (error) {
+				throw new Error(error);
+			}
+		},
+	});
 
 	const {
 		data: user,
@@ -57,6 +72,14 @@ const ProfilePage = () => {
 	const memberSinceDate = formatMemberSinceDate(user?.createdAt);
 	const amIFollowing = authUser?.following.includes(user?._id);
 
+	const customPrompt = (() => {
+		try {
+			return user?.dotfile ? JSON.parse(user.dotfile).prompt : null;
+		} catch {
+			return null;
+		}
+	})();
+
 	const handleImgChange = (e, state) => {
 		const file = e.target.files[0];
 		if (file) {
@@ -75,7 +98,7 @@ const ProfilePage = () => {
 
 	return (
 		<>
-			<div className='flex-[4_4_0]  border-r border-gray-700 min-h-screen '>
+			<div className='flex-[4_4_0] border-r border-gray-700 min-h-screen '>
 				{/* HEADER */}
 				{(isLoading || isRefetching) && <ProfileHeaderSkeleton />}
 				{!isLoading && !isRefetching && !user && <p className='text-center text-lg mt-4'>User not found</p>}
@@ -89,6 +112,11 @@ const ProfilePage = () => {
 								<div className='flex flex-col'>
 									<p className='font-bold text-lg'>{user?.fullName}</p>
 									<span className='text-sm text-slate-500'>{POSTS?.length} posts</span>
+									{customPrompt && (
+										<div className='text-green-400 font-mono mt-1'>
+											{customPrompt}
+										</div>
+									)}
 								</div>
 							</div>
 							{/* COVER IMG */}

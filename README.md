@@ -1,34 +1,34 @@
-# SocialSphere - Modern Social Media Platform
+# commitly - Terminal-Inspired Social Platform
 
-![SocialSphere](https://img.shields.io/badge/SocialSphere-v1.0.0-blue?style=for-the-badge&logo=twitter)
+![commitly](https://img.shields.io/badge/commitly-v1.0.0-green?style=for-the-badge&logo=terminal)
 ![React](https://img.shields.io/badge/React-18.2.0-blue?style=for-the-badge&logo=react)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge&logo=node.js)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Database-green?style=for-the-badge&logo=mongodb)
 ![Tailwind](https://img.shields.io/badge/Tailwind-CSS-blue?style=for-the-badge&logo=tailwindcss)
 
-A modern, feature-rich social media platform built with cutting-edge technologies to showcase full-stack development skills. SocialSphere combines the best of modern web development with an elegant, responsive design and real-time features.
+A developer-centric, terminal-inspired social media platform built with cutting-edge technologies. commitly combines the familiar aesthetics of command-line interfaces with modern social networking features, creating a unique platform tailored for developers.
 
 ## 🌟 Live Demo
 
-[Visit SocialSphere](http://localhost:3000) *(Local development server)*
+[Visit commitly](http://localhost:3001) *(Local development server)*
 
 ## 🚀 Features
 
-### ✨ Core Features
-- **🔐 Authentication System** - Secure JWT-based authentication with bcrypt password hashing
-- **📝 Real-time Posts** - Create, edit, and delete posts with instant updates
-- **❤️ Interactive Engagement** - Like and comment on posts with real-time notifications
-- **👥 User Connections** - Follow/unfollow users and build your network
-- **🔔 Smart Notifications** - Real-time notifications for likes, comments, and follows
-- **👤 User Profiles** - Customizable profiles with bio, cover images, and profile pictures
-- **📱 Responsive Design** - Fully responsive across all devices and screen sizes
+### ✨ Terminal-Inspired Core Features
+- **�️ Full Terminal Aesthetic** - Complete terminal-style UI with green text on black background
+- **⌨️ Command Palette** - Ctrl+K to access powerful command interface with git-style commands
+- **�🔐 Authentication System** - Secure JWT-based authentication with bcrypt password hashing
+- **📝 Git-Style Posts** - Posts displayed as git commits with commit hashes and git-style metadata
+- **💬 SSH-Style Direct Messages** - Terminal-inspired DM system with command-line interface
+- **� CLI-Style Polls** - Create and vote on polls using terminal commands
+- **⚙️ Dotfile Configuration** - Edit your profile and settings in a vim-style configuration interface
 
-### 🎨 Modern UI/UX
-- **🌙 Dark Theme** - Beautiful dark theme with gradient accents
-- **✨ Glass Morphism** - Modern glass effects and backdrop blur
-- **🎭 Smooth Animations** - Engaging micro-interactions and transitions
-- **📐 Clean Layout** - Intuitive navigation and organized content structure
-- **🎨 Custom Design System** - Consistent branding and visual hierarchy
+### 🎨 Developer-Centric Experience  
+- **🌙 Terminal Theme** - Authentic terminal colors and typography with customizable prompts
+- **📱 Responsive Design** - Terminal interface that works perfectly on all devices
+- **⚡ Real-time Updates** - Live notifications and real-time data synchronization
+- **� Advanced Search** - Smart search functionality with autocomplete
+- **👥 User Discovery** - Intelligent user suggestions in terminal-style panels
 
 ### 🛡️ Technical Excellence
 - **⚡ Performance Optimized** - Fast loading times and optimized bundle size
@@ -125,8 +125,8 @@ twitter/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/socialsphere.git
-   cd socialsphere
+   git clone https://github.com/yourusername/commitly.git
+   cd commitly
    ```
 
 2. **Install backend dependencies**
@@ -279,7 +279,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Your Name** - [your.email@example.com](mailto:your.email@example.com)
 
-**Project Link**: [https://github.com/yourusername/socialsphere](https://github.com/yourusername/socialsphere)
+**Project Link**: [https://github.com/yourusername/commitly](https://github.com/yourusername/commitly)
 
 **Portfolio**: [https://yourportfolio.com](https://yourportfolio.com)
 

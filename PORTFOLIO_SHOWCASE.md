@@ -1,8 +1,8 @@
-# SocialSphere - Portfolio Project Showcase
+# commitly - Portfolio Project Showcase
 
 ## 🎯 Project Overview
 
-**SocialSphere** is a modern, full-stack social media platform that demonstrates advanced web development skills and showcases proficiency in contemporary technologies. This project serves as a comprehensive portfolio piece, highlighting expertise in both frontend and backend development, modern UI/UX design, and best practices in software architecture.
+**commitly** is a developer-centric, terminal-inspired social media platform that demonstrates advanced web development skills and showcases proficiency in contemporary technologies. This project serves as a comprehensive portfolio piece, highlighting expertise in both frontend and backend development, modern UI/UX design, and best practices in software architecture.
 
 ## 🌟 Why This Project Stands Out
 
@@ -153,8 +153,8 @@ This project serves as a comprehensive demonstration of:
 
 ## 🔗 Links & Resources
 
-- **Live Demo**: [SocialSphere Demo](http://localhost:3000)
-- **GitHub Repository**: [Source Code](https://github.com/yourusername/socialsphere)
+- **Live Demo**: [commitly Demo](http://localhost:3001)
+- **GitHub Repository**: [Source Code](https://github.com/yourusername/commitly)
 - **Documentation**: Comprehensive README and inline documentation
 - **Portfolio**: [Developer Portfolio](https://yourportfolio.com)
 

@@ -10,6 +10,7 @@ const EditProfileModal = ({ authUser }) => {
 		link: "",
 		newPassword: "",
 		currentPassword: "",
+		dotfile: '',
 	});
 
 	const { updateProfile, isUpdatingProfile } = useUpdateUserProfile();
@@ -28,6 +29,7 @@ const EditProfileModal = ({ authUser }) => {
 				link: authUser.link,
 				newPassword: "",
 				currentPassword: "",
+				dotfile: authUser.dotfile || '',
 			});
 		}
 	}, [authUser]);
@@ -111,6 +113,19 @@ const EditProfileModal = ({ authUser }) => {
 							name='link'
 							onChange={handleInputChange}
 						/>
+						<textarea
+							placeholder='.commitlyrc (advanced profile customization)'
+							className='flex-1 input border border-green-400 rounded p-2 input-md font-mono bg-black text-green-400 mt-2'
+							value={formData.dotfile}
+							name='dotfile'
+							onChange={handleInputChange}
+							rows={6}
+						/>
+						{formData.dotfile && (
+							<div className='mt-2 p-2 border border-green-400 rounded bg-black text-green-400 font-mono'>
+								Live Prompt Preview: {JSON.parse(formData.dotfile)?.prompt || 'user@commitly:~$'}
+							</div>
+						)}
 						<button className='btn btn-primary rounded-full btn-sm text-white'>
 							{isUpdatingProfile ? "Updating..." : "Update"}
 						</button>

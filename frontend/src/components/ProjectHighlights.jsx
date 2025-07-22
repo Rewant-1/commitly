@@ -111,7 +111,7 @@ const ProjectHighlights = () => {
           </h3>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
-              href="https://github.com/yourusername/socialsphere"
+              href="https://github.com/yourusername/commitly"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-3 px-8 py-4 bg-black/60 border border-white/20 text-white rounded-xl hover:bg-black/80 transition-all duration-200 font-semibold"

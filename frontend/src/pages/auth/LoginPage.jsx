@@ -65,7 +65,7 @@ const LoginPage = () => {
 					<div className="space-y-4">
 						<div className="space-y-2">
 							<div className="text-green-400">$ git pull --user</div>
-							<div className="text-green-300 text-xl">Welcome back to gittweet</div>
+							<div className="text-green-300 text-xl">Welcome back to commitly</div>
 						</div>
 
 						<form onSubmit={handleSubmit} className="space-y-4">

@@ -64,7 +64,7 @@ const SignUpPage = () => {
 					<div className="space-y-4">
 						<div className="space-y-2">
 							<div className="text-green-400">$ git clone --new-user</div>
-							<div className="text-green-300 text-xl">Join the gittweet community</div>
+							<div className="text-green-300 text-xl">Join the commitly community</div>
 						</div>
 
 						<form onSubmit={handleSubmit} className="space-y-4">

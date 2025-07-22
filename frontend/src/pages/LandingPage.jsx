@@ -6,7 +6,7 @@ const LandingPage = () => {
   const [showCursor, setShowCursor] = useState(true);
 
   const terminalLines = [
-    "$ welcome to gittweet",
+    "$ welcome to commitly",
     "$ a terminal-inspired social platform",
     "$ type your thoughts like git commits",
     "$ -git commit -m \"your message here\"",
@@ -35,7 +35,7 @@ const LandingPage = () => {
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="text-green-400">$</span>
-            <span className="text-green-400">gittweet</span>
+            <span className="text-green-400">commitly</span>
           </div>
           <nav className="flex space-x-6">
             <Link 
@@ -112,7 +112,7 @@ const LandingPage = () => {
           <h3 className="text-xl mb-4">$ demo</h3>
           <div className="bg-gray-900 p-4 rounded">
             <div className="space-y-2">
-              <div><span className="text-green-400">user@gittweet:~$</span> -git commit -m "working on a new project"</div>
+              <div><span className="text-green-400">user@commitly:~$</span> -git commit -m "working on a new project"</div>
               <div className="text-green-300">✓ tweet posted successfully</div>
               <div className="mt-4 pl-4 border-l-2 border-green-400">
                 <div className="text-sm text-gray-400">@username • 2m</div>
@@ -146,7 +146,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="border-t border-green-400 p-4 mt-12">
         <div className="max-w-4xl mx-auto text-center text-green-600 text-sm">
-          <p>gittweet - where developers tweet in their native language</p>
+          <p>commitly - where developers tweet in their native language</p>
         </div>
       </footer>
     </div>

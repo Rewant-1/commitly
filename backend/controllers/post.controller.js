@@ -230,3 +230,73 @@ export const getUserPosts = async (req, res) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
+
+export const bookmarkPost = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const { id: postId } = req.params;
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+		if (user.bookmarkedPosts.includes(postId)) {
+			return res.status(400).json({ error: "Post already bookmarked" });
+		}
+		user.bookmarkedPosts.push(postId);
+		await user.save();
+		res.status(200).json(user.bookmarkedPosts);
+	} catch (error) {
+		console.log("Error in bookmarkPost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const unbookmarkPost = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const { id: postId } = req.params;
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+		user.bookmarkedPosts = user.bookmarkedPosts.filter(
+			(pid) => pid.toString() !== postId
+		);
+		await user.save();
+		res.status(200).json(user.bookmarkedPosts);
+	} catch (error) {
+		console.log("Error in unbookmarkPost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const retweetPost = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const { id: postId } = req.params;
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+		if (user.retweetedPosts.includes(postId)) {
+			return res.status(400).json({ error: "Post already retweeted" });
+		}
+		user.retweetedPosts.push(postId);
+		await user.save();
+		res.status(200).json(user.retweetedPosts);
+	} catch (error) {
+		console.log("Error in retweetPost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const unretweetPost = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const { id: postId } = req.params;
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+		user.retweetedPosts = user.retweetedPosts.filter(
+			(pid) => pid.toString() !== postId
+		);
+		await user.save();
+		res.status(200).json(user.retweetedPosts);
+	} catch (error) {
+		console.log("Error in unretweetPost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};

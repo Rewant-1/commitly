@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import DotfileConfigModal from "../../DotfileConfigModal.jsx";
 
 const Sidebar = () => {
 	const queryClient = useQueryClient();
+	const [showDotfileModal, setShowDotfileModal] = useState(false);
+	
 	const { mutate: logout } = useMutation({
 		mutationFn: async () => {
 			try {
@@ -26,7 +30,22 @@ const Sidebar = () => {
 			toast.error("Logout failed");
 		},
 	});
-	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+	const { data: authUser } = useQuery({ 
+		queryKey: ["authUser"],
+		queryFn: async () => {
+			try {
+				const res = await fetch("/api/auth/me");
+				const data = await res.json();
+				if (data.error) return null;
+				if (!res.ok) {
+					throw new Error(data.error || "Something went wrong");
+				}
+				return data;
+			} catch (error) {
+				throw new Error(error);
+			}
+		},
+	});
 
 	return (
 		<div className='md:flex-[2_2_0] w-18 max-w-64 bg-black'>
@@ -37,14 +56,14 @@ const Sidebar = () => {
 						<div className='w-3 h-3 rounded-full bg-red-500'></div>
 						<div className='w-3 h-3 rounded-full bg-yellow-500'></div>
 						<div className='w-3 h-3 rounded-full bg-green-400'></div>
-						<span className='text-green-400 ml-4 hidden md:block'>gittweet.sh</span>
+						<span className='text-green-400 ml-4 hidden md:block'>commitly.sh</span>
 					</div>
 				</div>
 
 				{/* Navigation */}
 				<div className='flex-1 p-4 space-y-2'>
 					<div className='text-green-400 text-sm mb-4 hidden md:block'>
-						user@gittweet:~$
+						user@commitly:~$
 					</div>
 
 					<ul className='space-y-1'>
@@ -68,12 +87,31 @@ const Sidebar = () => {
 						</li>
 						<li>
 							<Link
+								to='/messages'
+								className='flex items-center gap-3 p-2 text-green-400 hover:bg-green-900/20 transition-colors border border-transparent hover:border-green-400'
+							>
+								<span className='text-green-400'>$</span>
+								<span className='hidden md:block'>ssh messages/</span>
+							</Link>
+						</li>
+						<li>
+							<Link
 								to={`/profile/${authUser?.username}`}
 								className='flex items-center gap-3 p-2 text-green-400 hover:bg-green-900/20 transition-colors border border-transparent hover:border-green-400'
 							>
 								<span className='text-green-400'>$</span>
 								<span className='hidden md:block'>whoami</span>
 							</Link>
+						</li>
+						<li>
+							<button
+								onClick={() => setShowDotfileModal(true)}
+								data-settings-btn
+								className='flex items-center gap-3 p-2 text-green-400 hover:bg-green-900/20 transition-colors border border-transparent hover:border-green-400 w-full text-left'
+							>
+								<span className='text-green-400'>$</span>
+								<span className='hidden md:block'>vim ~/.config</span>
+							</button>
 						</li>
 					</ul>
 				</div>
@@ -102,6 +140,7 @@ const Sidebar = () => {
 								e.preventDefault();
 								logout();
 							}}
+							data-logout-btn
 							className='w-full mt-2 flex items-center gap-3 p-2 text-red-400 hover:bg-red-900/20 transition-colors border border-transparent hover:border-red-400'
 						>
 							<span className='text-red-400'>$</span>
@@ -110,6 +149,13 @@ const Sidebar = () => {
 					</div>
 				)}
 			</div>
+			
+			{/* Dotfile Configuration Modal */}
+			<DotfileConfigModal 
+				isOpen={showDotfileModal} 
+				onClose={() => setShowDotfileModal(false)} 
+				authUser={authUser} 
+			/>
 		</div>
 	);
 };

@@ -59,6 +59,31 @@ const userSchema = new mongoose.Schema(
 				default: [],
 			},
 		],
+		bookmarkedPosts: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Post",
+				default: [],
+			},
+		],
+		retweetedPosts: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Post",
+				default: [],
+			},
+		],
+		conversations: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Conversation",
+				default: [],
+			},
+		],
+		dotfile: {
+			type: String,
+			default: '',
+		},
 	},
 	{ timestamps: true }
 );

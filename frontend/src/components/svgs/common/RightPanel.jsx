@@ -28,7 +28,7 @@ const RightPanel = () => {
 	if (suggestedUsers?.length === 0) return <div className='w-96'></div>;
 
 	return (
-		<div className='hidden lg:block w-96 px-4 bg-black'>
+		<div className='hidden lg:block w-96 px-4 bg-black space-y-4'>
 			<div className='border border-green-400 rounded-lg p-4 space-y-4 sticky top-2 bg-black font-mono'>
 				{/* Terminal Header */}
 				<div className='flex items-center space-x-2 border-b border-green-400 pb-2'>
@@ -93,6 +93,73 @@ const RightPanel = () => {
 				
 				<div className='text-green-600 text-xs border-t border-green-400 pt-2'>
 					tip: use 'git log --oneline' to see recent activity
+				</div>
+			</div>
+
+			{/* Terminal Shortcuts Panel */}
+			<div className='border border-green-400 rounded-lg p-4 bg-black font-mono sticky top-2'>
+				<div className='flex items-center space-x-2 border-b border-green-400 pb-2 mb-3'>
+					<div className='w-3 h-3 rounded-full bg-red-500'></div>
+					<div className='w-3 h-3 rounded-full bg-yellow-500'></div>
+					<div className='w-3 h-3 rounded-full bg-green-400'></div>
+					<span className='text-green-400 ml-4'>shortcuts.sh</span>
+				</div>
+				
+				<div className='space-y-2 text-xs'>
+					<div className='text-green-400 mb-2'>$ cat keyboard_shortcuts.txt</div>
+					<div className='space-y-1 text-green-600'>
+						<div className='flex justify-between'>
+							<span>Ctrl+K</span>
+							<span className='text-green-500'>Command Palette</span>
+						</div>
+						<div className='flex justify-between'>
+							<span>Ctrl+Enter</span>
+							<span className='text-green-500'>Submit Post</span>
+						</div>
+						<div className='flex justify-between'>
+							<span>Esc</span>
+							<span className='text-green-500'>Close Modals</span>
+						</div>
+						<div className='flex justify-between'>
+							<span>/</span>
+							<span className='text-green-500'>Focus Search</span>
+						</div>
+					</div>
+					<div className='text-green-600 text-xs mt-3 pt-2 border-t border-green-600'>
+						💡 Try: "git push", "whoami", "ssh messages/"
+					</div>
+				</div>
+			</div>
+
+			{/* System Status Panel */}
+			<div className='border border-green-400 rounded-lg p-4 bg-black font-mono sticky top-2'>
+				<div className='flex items-center space-x-2 border-b border-green-400 pb-2 mb-3'>
+					<div className='w-3 h-3 rounded-full bg-red-500'></div>
+					<div className='w-3 h-3 rounded-full bg-yellow-500'></div>
+					<div className='w-3 h-3 rounded-full bg-green-400'></div>
+					<span className='text-green-400 ml-4'>system.status</span>
+				</div>
+				
+				<div className='space-y-2 text-xs'>
+					<div className='text-green-400 mb-2'>$ systemctl status commitly</div>
+					<div className='space-y-1 text-green-600'>
+						<div className='flex justify-between'>
+							<span>Status:</span>
+							<span className='text-green-500'>● Active (running)</span>
+						</div>
+						<div className='flex justify-between'>
+							<span>Uptime:</span>
+							<span className='text-green-500'>13:37:42</span>
+						</div>
+						<div className='flex justify-between'>
+							<span>Users:</span>
+							<span className='text-green-500'>1.337k online</span>
+						</div>
+						<div className='flex justify-between'>
+							<span>Memory:</span>
+							<span className='text-green-500'>42MB / 8GB</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
