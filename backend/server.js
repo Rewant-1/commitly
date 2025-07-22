@@ -11,7 +11,8 @@ import notificationRoutes from "./routes/notification.route.js";
 
 import connectMongoDB from "./db/connectMongoDB.js";
 
-dotenv.config();
+// Load .env from parent directory (root of project)
+dotenv.config({ path: 'c:\\Users\\DELL\\OneDrive\\Desktop\\twitter\\.env' });
 
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

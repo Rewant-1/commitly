@@ -8,27 +8,29 @@ const HomePage = () => {
 
 	return (
 		<>
-			<div className='flex-[5_5_0] mr-auto border-r border-gray-700 min-h-screen'>
+			<div className='flex-[5_5_0] mr-auto border-r border-green-400 min-h-screen bg-black'>
 				{/* Header */}
-				<div className='flex w-full border-b border-gray-700'>
+				<div className='flex w-full border-b border-green-400'>
 					<div
-						className={
-							"flex justify-center flex-1 p-4 hover:bg-secondary transition duration-300 cursor-pointer relative text-lg"
-						}
+						className={`flex justify-center flex-1 p-4 hover:bg-green-900/20 transition duration-300 cursor-pointer relative text-lg font-mono ${
+							feedType === "forYou" ? "text-green-400" : "text-green-600"
+						}`}
 						onClick={() => setFeedType("forYou")}
 					>
-						For you
+						for_you
 						{feedType === "forYou" && (
-							<div className='absolute bottom-0 w-12 h-1 rounded-full bg-primary'></div>
+							<div className='absolute bottom-0 w-12 h-1 rounded-full bg-green-400'></div>
 						)}
 					</div>
 					<div
-						className='flex justify-center flex-1 p-4 hover:bg-secondary transition duration-300 cursor-pointer relative text-lg'
+						className={`flex justify-center flex-1 p-4 hover:bg-green-900/20 transition duration-300 cursor-pointer relative text-lg font-mono ${
+							feedType === "following" ? "text-green-400" : "text-green-600"
+						}`}
 						onClick={() => setFeedType("following")}
 					>
-						Following
+						following
 						{feedType === "following" && (
-							<div className='absolute bottom-0 w-12 h-1 rounded-full bg-primary'></div>
+							<div className='absolute bottom-0 w-12 h-1 rounded-full bg-green-400'></div>
 						)}
 					</div>
 				</div>

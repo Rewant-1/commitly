@@ -13,7 +13,7 @@ import RightPanel from "./components/svgs/common/RightPanel.jsx";
 
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import ModernLoadingSpinner from "./components/ModernLoadingSpinner.jsx";
+import LoadingSpinner from "./components/svgs/common/LoadingSpinner.jsx";
 
 function App() {
 	const { data: authUser, isLoading } = useQuery({
@@ -37,7 +37,11 @@ function App() {
 	});
 
 	if (isLoading) {
-		return <ModernLoadingSpinner size="lg" message="Initializing SocialSphere..." />;
+		return (
+			<div className='h-screen flex justify-center items-center'>
+				<LoadingSpinner size='lg' />
+			</div>
+		);
 	}
 
 	return (

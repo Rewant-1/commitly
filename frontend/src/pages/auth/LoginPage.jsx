@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import XSvg from "../../components/svgs/x.jsx";
-
-import { MdOutlineMail } from "react-icons/md";
-import { MdPassword } from "react-icons/md";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const LoginPage = () => {
@@ -56,50 +51,86 @@ const LoginPage = () => {
 	};
 
 	return (
-		<div className='max-w-screen-xl mx-auto flex h-screen'>
-			<div className='flex-1 hidden lg:flex items-center  justify-center'>
-				<XSvg className='lg:w-2/3 fill-white' />
-			</div>
-			<div className='flex-1 flex flex-col justify-center items-center'>
-				<form className='flex gap-4 flex-col' onSubmit={handleSubmit}>
-					<XSvg className='w-24 lg:hidden fill-white' />
-					<h1 className='text-4xl font-extrabold text-white'>{"Let's"} go.</h1>
-					<label className='input input-bordered rounded flex items-center gap-2'>
-						<MdOutlineMail />
-						<input
-							type='text'
-							className='grow'
-							placeholder='username'
-							name='username'
-							onChange={handleInputChange}
-							value={formData.username}
-						/>
-					</label>
+		<div className="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center">
+			<div className="max-w-md w-full p-8">
+				{/* Terminal Window */}
+				<div className="border border-green-400 rounded-lg p-6">
+					<div className="flex items-center space-x-2 mb-6 border-b border-green-400 pb-2">
+						<div className="w-3 h-3 rounded-full bg-red-500"></div>
+						<div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+						<div className="w-3 h-3 rounded-full bg-green-400"></div>
+						<span className="text-green-400 ml-4">login.sh</span>
+					</div>
 
-					<label className='input input-bordered rounded flex items-center gap-2'>
-						<MdPassword />
-						<input
-							type='password'
-							className='grow'
-							placeholder='Password'
-							name='password'
-							onChange={handleInputChange}
-							value={formData.password}
-						/>
-					</label>
-					<button className='btn rounded-full btn-primary text-white'>
-						{isPending ? "Loading..." : "Login"}
-					</button>
-					{isError && <p className='text-red-500'>{error.message}</p>}
-				</form>
-				<div className='flex flex-col gap-2 mt-4'>
-					<p className='text-white text-lg'>{"Don't"} have an account?</p>
-					<Link to='/signup'>
-						<button className='btn rounded-full btn-primary text-white btn-outline w-full'>Sign up</button>
-					</Link>
+					<div className="space-y-4">
+						<div className="space-y-2">
+							<div className="text-green-400">$ git pull --user</div>
+							<div className="text-green-300 text-xl">Welcome back to gittweet</div>
+						</div>
+
+						<form onSubmit={handleSubmit} className="space-y-4">
+							<div>
+								<label className="block text-green-400 text-sm mb-1">
+									username:
+								</label>
+								<input
+									type="text"
+									name="username"
+									value={formData.username}
+									onChange={handleInputChange}
+									className="w-full bg-black border border-green-400 text-green-400 font-mono p-2 focus:outline-none focus:border-green-300"
+									placeholder="enter username..."
+									required
+								/>
+							</div>
+
+							<div>
+								<label className="block text-green-400 text-sm mb-1">
+									password:
+								</label>
+								<input
+									type="password"
+									name="password"
+									value={formData.password}
+									onChange={handleInputChange}
+									className="w-full bg-black border border-green-400 text-green-400 font-mono p-2 focus:outline-none focus:border-green-300"
+									placeholder="enter password..."
+									required
+								/>
+							</div>
+
+							{isError && (
+								<div className="text-red-400 text-sm">
+									error: {error.message}
+								</div>
+							)}
+
+							<button
+								type="submit"
+								disabled={isPending}
+								className="w-full border border-green-400 bg-black text-green-400 font-mono p-2 hover:bg-green-400 hover:text-black transition-colors disabled:opacity-50"
+							>
+								{isPending ? "authenticating..." : "$ git login"}
+							</button>
+						</form>
+
+						<div className="text-center text-green-600 text-sm">
+							<span>need an account? </span>
+							<Link to="/signup" className="text-green-400 hover:underline">
+								git clone --signup
+							</Link>
+						</div>
+
+						<div className="text-center">
+							<Link to="/" className="text-green-600 hover:text-green-400 text-sm">
+								← back to home
+							</Link>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	);
 };
+
 export default LoginPage;
