@@ -361,7 +361,7 @@ const CreatePost = () => {
 							<span className="text-white">:</span>
 							<span className="text-blue-400">~/tweets</span>
 							<span className="text-white">$ </span>
-							{!commandInput && <span className="terminal-cursor">█</span>}
+							{!commandInput && (<span className="terminal-cursor">█</span>)}
 						</div>
 
 						<form onSubmit={handleCommandSubmit} className="space-y-3">
