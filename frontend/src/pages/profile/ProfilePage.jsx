@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import Posts from "../../components/svgs/common/Posts.jsx";
-import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton.jsx";
-import EditProfileModal from "./EditProfileModal.jsx";
+import Posts from "../../components/svgs/common/Posts";
+import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
+import EditProfileModal from "./EditProfileModal";
 
-import { POSTS } from "../../utils/db/dummy.js";
+import { POSTS } from "../../utils/db/dummy";
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
@@ -14,8 +14,8 @@ import { MdEdit } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { formatMemberSinceDate } from "../../utils/date";
 
-import useFollow from "../../hooks/useFollow.jsx";
-import useUpdateUserProfile from "../../hooks/useUpdateUserProfile.jsx";
+import useFollow from "../../hooks/useFollow";
+import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
 const ProfilePage = () => {
 	const [coverImg, setCoverImg] = useState(null);
@@ -28,22 +28,7 @@ const ProfilePage = () => {
 	const { username } = useParams();
 
 	const { follow, isPending } = useFollow();
-	const { data: authUser } = useQuery({ 
-		queryKey: ["authUser"],
-		queryFn: async () => {
-			try {
-				const res = await fetch("/api/auth/me");
-				const data = await res.json();
-				if (data.error) return null;
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
-				return data;
-			} catch (error) {
-				throw new Error(error);
-			}
-		},
-	});
+	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
 	const {
 		data: user,
@@ -72,14 +57,6 @@ const ProfilePage = () => {
 	const memberSinceDate = formatMemberSinceDate(user?.createdAt);
 	const amIFollowing = authUser?.following.includes(user?._id);
 
-	const customPrompt = (() => {
-		try {
-			return user?.dotfile ? JSON.parse(user.dotfile).prompt : null;
-		} catch {
-			return null;
-		}
-	})();
-
 	const handleImgChange = (e, state) => {
 		const file = e.target.files[0];
 		if (file) {
@@ -98,7 +75,7 @@ const ProfilePage = () => {
 
 	return (
 		<>
-			<div className='flex-[4_4_0] border-r border-gray-700 min-h-screen '>
+			<div className='flex-[4_4_0]  border-r border-gray-700 min-h-screen '>
 				{/* HEADER */}
 				{(isLoading || isRefetching) && <ProfileHeaderSkeleton />}
 				{!isLoading && !isRefetching && !user && <p className='text-center text-lg mt-4'>User not found</p>}
@@ -112,11 +89,6 @@ const ProfilePage = () => {
 								<div className='flex flex-col'>
 									<p className='font-bold text-lg'>{user?.fullName}</p>
 									<span className='text-sm text-slate-500'>{POSTS?.length} posts</span>
-									{customPrompt && (
-										<div className='text-green-400 font-mono mt-1'>
-											{customPrompt}
-										</div>
-									)}
 								</div>
 							</div>
 							{/* COVER IMG */}
@@ -152,7 +124,7 @@ const ProfilePage = () => {
 								{/* USER AVATAR */}
 								<div className='avatar absolute -bottom-16 left-4'>
 									<div className='w-32 rounded-full relative group/avatar'>
-										<img src={profileImg || user?.profileImg || "/avatar-placeholder.jpg"} />
+										<img src={profileImg || user?.profileImg || "/avatar-placeholder.png"} />
 										<div className='absolute top-5 right-3 p-1 bg-primary rounded-full group-hover/avatar:opacity-100 opacity-0 cursor-pointer'>
 											{isMyProfile && (
 												<MdEdit

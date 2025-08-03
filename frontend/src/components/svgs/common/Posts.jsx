@@ -1,5 +1,5 @@
 import Post from "./Post";
-import PostSkeleton from "../../skeletons/PostSkeleton.jsx";
+import PostSkeleton from "../../skeletons/PostSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
@@ -49,7 +49,7 @@ const Posts = ({ feedType, username, userId }) => {
 	}, [feedType, refetch, username]);
 
 	return (
-		<div className="bg-black text-green-400 font-mono">
+		<>
 			{(isLoading || isRefetching) && (
 				<div className='flex flex-col justify-center'>
 					<PostSkeleton />
@@ -58,13 +58,7 @@ const Posts = ({ feedType, username, userId }) => {
 				</div>
 			)}
 			{!isLoading && !isRefetching && posts?.length === 0 && (
-				<div className='text-center my-8 p-4'>
-					<div className="border border-green-400 p-4">
-						<div className="text-green-600 mb-2">$ ls -la ~/tweets/</div>
-						<div className="text-green-400">total 0</div>
-						<div className="text-green-600 mt-4">No commits found. Start tweeting!</div>
-					</div>
-				</div>
+				<p className='text-center my-4'>No posts in this tab. Switch 👻</p>
 			)}
 			{!isLoading && !isRefetching && posts && (
 				<div>
@@ -73,7 +67,7 @@ const Posts = ({ feedType, username, userId }) => {
 					))}
 				</div>
 			)}
-		</div>
+		</>
 	);
 };
 export default Posts;

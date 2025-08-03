@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-import LoadingSpinner from "../../components/svgs/common/LoadingSpinner.jsx";
+import LoadingSpinner from "../../components/svgs/common/LoadingSpinner";
 
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
@@ -80,7 +80,7 @@ const NotificationPage = () => {
 							<Link to={`/profile/${notification.from.username}`}>
 								<div className='avatar'>
 									<div className='w-8 rounded-full'>
-										<img src={notification.from.profileImg || "/avatar-placeholder.jpg"} />
+										<img src={notification.from.profileImg || "/avatar-placeholder.png"} />
 									</div>
 								</div>
 								<div className='flex gap-1'>

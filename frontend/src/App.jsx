@@ -1,39 +1,19 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { useState, useEffect } from "react";
 
-import HomePage from "./pages/HomePage.jsx";
-import LoginPage from "./pages/auth/LoginPage.jsx";
-import SignUpPage from "./pages/auth/Signup.jsx";
-import NotificationPage from "./pages/notification/NotificationPage.jsx";
-import ProfilePage from "./pages/profile/ProfilePage.jsx";
-import MessagesPage from "./pages/MessagesPage.jsx";
-import LandingPage from "./pages/LandingPage.jsx";
-import NotFoundPage from "./pages/NotFoundPage.jsx";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/auth/LoginPage";
+import SignUpPage from "./pages/auth/Signup";
+import NotificationPage from "./pages/notification/NotificationPage";
+import ProfilePage from "./pages/profile/ProfilePage";
 
-import Sidebar from "./components/svgs/common/Sidebar.jsx";
-import RightPanel from "./components/svgs/common/RightPanel.jsx";
-import CommandPalette from "./components/CommandPalette.jsx";
+import Sidebar from "./components/svgs/common/Sidebar";
+import RightPanel from "./components/svgs/common/RightPanel";
 
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import ModernLoadingSpinner from "./components/ModernLoadingSpinner.jsx";
+import LoadingSpinner from "./components/svgs/common/LoadingSpinner";
 
 function App() {
-	const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-	
-	// Keyboard shortcut for command palette (Ctrl+K)
-	useEffect(() => {
-		const handleKeyDown = (e) => {
-			if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-				e.preventDefault();
-				setIsCommandPaletteOpen(true);
-			}
-		};
-
-		window.addEventListener("keydown", handleKeyDown);
-		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, []);
-
 	const { data: authUser, isLoading } = useQuery({
 		// we use queryKey to give a unique name to our query and refer to it later
 		queryKey: ["authUser"],
@@ -55,50 +35,27 @@ function App() {
 	});
 
 	if (isLoading) {
-		return <ModernLoadingSpinner size="lg" message="Initializing commitly..." />;
+		return (
+			<div className='h-screen flex justify-center items-center'>
+				<LoadingSpinner size='lg' />
+			</div>
+		);
 	}
 
 	return (
-		<>
+		<div className='flex max-w-6xl mx-auto'>
+			{/* Common component, bc it's not wrapped with Routes */}
+			{authUser && <Sidebar />}
 			<Routes>
-				<Route path='/' element={authUser ? (
-					<div className='flex max-w-6xl mx-auto'>
-						<Sidebar />
-						<HomePage />
-						<RightPanel />
-					</div>
-				) : <LandingPage />} />
+				<Route path='/' element={authUser ? <HomePage /> : <Navigate to='/login' />} />
 				<Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/' />} />
 				<Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to='/' />} />
-				<Route path='/notifications' element={authUser ? (
-					<div className='flex max-w-6xl mx-auto'>
-						<Sidebar />
-						<NotificationPage />
-						<RightPanel />
-					</div>
-				) : <Navigate to='/login' />} />
-				<Route path='/profile/:username' element={authUser ? (
-					<div className='flex max-w-6xl mx-auto'>
-						<Sidebar />
-						<ProfilePage />
-						<RightPanel />
-					</div>
-				) : <Navigate to='/login' />} />
-				<Route path='/messages' element={authUser ? <MessagesPage /> : <Navigate to='/login' />} />
-				<Route path='/messages/:username' element={authUser ? <MessagesPage /> : <Navigate to='/login' />} />
-				<Route path='*' element={<NotFoundPage />} />
+				<Route path='/notifications' element={authUser ? <NotificationPage /> : <Navigate to='/login' />} />
+				<Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to='/login' />} />
 			</Routes>
-			
-			{/* Command Palette - Available globally when logged in */}
-			{authUser && (
-				<CommandPalette 
-					isOpen={isCommandPaletteOpen} 
-					onClose={() => setIsCommandPaletteOpen(false)} 
-				/>
-			)}
-			
+			{authUser && <RightPanel />}
 			<Toaster />
-		</>
+		</div>
 	);
 }
 
