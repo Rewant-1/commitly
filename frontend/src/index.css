@@ -78,10 +78,10 @@ html {
   transition: left 0.5s;
 }
 
-.btn-premium:hover::before {
+.btn-premium:hover::before,
+.btn-premium:focus-visible::before {
   left: 100%;
 }
-
 /* Loading dots animation */
 .loading-dots {
   display: inline-block;
@@ -169,10 +169,11 @@ html {
 
 /* Focus styles */
 input:focus, textarea:focus, button:focus {
-  outline: none;
+  /* Preserve outline for forced-colors, hide only when box-shadow is shown */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5);
 }
-
 /* Selection styles */
 ::selection {
   background: rgba(34, 197, 94, 0.3);
@@ -191,18 +192,28 @@ input:focus, textarea:focus, button:focus {
   }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.5s ease-out;
-}
-
 @keyframes shimmer {
   0% { background-position: -200px 0; }
   100% { background-position: calc(200px + 100%) 0; }
 }
 
-.shimmer {
-  background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent);
-  background-size: 200px 100%;
-  animation: shimmer 2s infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+  }
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent);
+    background-size: 200px 100%;
+    animation: shimmer 2s infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none !important;
+  }
+  .shimmer {
+    animation: none !important;
+  }
 }
 

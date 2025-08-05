@@ -61,7 +61,13 @@ const NotificationPage = () => {
 							className='dropdown-content z-[1] menu p-2 shadow bg-gray-800 rounded-box w-52 border border-green-400'
 						>
 							<li>
-								<a onClick={deleteNotifications} className='text-green-300 font-mono hover:bg-gray-700'>git clean --all</a>
+								<button
+									type='button'
+									onClick={deleteNotifications}
+									className='text-green-300 font-mono hover:bg-gray-700 w-full text-left'
+								>
+									git clean --all
+								</button>
 							</li>
 						</ul>
 					</div>

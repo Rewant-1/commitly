@@ -41,9 +41,28 @@ const { mutate, isError, isPending, error } = useMutation({
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
+		// Basic validation
+		if (!formData.email || !formData.username || !formData.fullName || !formData.password) {
+			toast.error("All fields are required");
+			return;
+		}
+
+		// Email validation
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(formData.email)) {
+			toast.error("Please enter a valid email address");
+			return;
+		}
+
+		// Password strength validation (optional)
+		if (formData.password.length < 8) {
+			toast.error("Password must be at least 8 characters long");
+			return;
+		}
+
 		mutate(formData);
 	};
-
 	const handleInputChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};

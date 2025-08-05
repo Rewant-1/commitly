@@ -33,7 +33,7 @@ const CreatePost = () => {
     }
     return data;
   } catch (error) {
-    throw new Error(error);
+    throw error instanceof Error ? error : new Error(String(error));
   }
   },
   onSuccess: () => {
@@ -78,7 +78,7 @@ const CreatePost = () => {
       <form className="flex gap-4" autoComplete="off">
         <div className="avatar flex-shrink-0">
           <div className="w-14 h-14 rounded-full border-2 border-green-400/60 overflow-hidden flex items-center justify-center bg-black shadow-lg shadow-green-400/20 hover:shadow-green-400/40 transition-all duration-300">
-            <img src={authUser.profileImg || "/avatars/boy3.jpg"} className="w-full h-full object-cover rounded-full" />
+            <img src={(authUser?.profileImg) ? authUser.profileImg : "/avatars/boy3.jpg"} className="w-full h-full object-cover rounded-full" />
           </div>
         </div>
         <div className="flex-1 min-w-0">
@@ -101,7 +101,9 @@ const CreatePost = () => {
                 className="absolute -top-2 -right-2 text-green-400 bg-gray-800/90 backdrop-blur-sm rounded-full w-7 h-7 cursor-pointer hover:bg-gray-700/90 hover:text-green-300 transition-all duration-200 shadow-lg z-10"
                 onClick={() => {
                   setImg(null);
-                  imgRef.current.value = null;
+                  if (imgRef.current) {
+                    imgRef.current.value = null;
+                  }
                 }}
               />
               <img src={img} className="w-full h-72 object-cover rounded-xl border border-green-400/40 shadow-lg hover:shadow-green-400/20 transition-all duration-300" />

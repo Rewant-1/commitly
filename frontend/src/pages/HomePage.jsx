@@ -26,8 +26,7 @@ const HomePage = () => {
 						className='flex justify-center flex-1 p-3 hover:bg-green-900 text-green-400 font-mono transition duration-300 cursor-pointer relative'
 						onClick={() => setFeedType("following")}
 					>
-						$ git log --following
-						{feedType === "following" && (
+						$ git log --follow						{feedType === "following" && (
 							<div className='absolute bottom-0 w-10  h-1 rounded-full bg-green-400'></div>
 						)}
 					</div>
