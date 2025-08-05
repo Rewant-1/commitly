@@ -49,19 +49,19 @@ const NotificationPage = () => {
 
 	return (
 		<>
-			<div className='flex-[4_4_0] border-l border-r border-gray-700 min-h-screen'>
-				<div className='flex justify-between items-center p-4 border-b border-gray-700'>
-					<p className='font-bold'>Notifications</p>
+			<div className='flex-[4_4_0] border-l border-r border-green-400 min-h-screen'>
+				<div className='flex justify-between items-center p-4 border-b border-green-400'>
+					<p className='font-bold text-green-300 font-mono'>$ git log --notifications</p>
 					<div className='dropdown '>
 						<div tabIndex={0} role='button' className='m-1'>
-							<IoSettingsOutline className='w-4' />
+							<IoSettingsOutline className='w-4 text-green-400' />
 						</div>
 						<ul
 							tabIndex={0}
-							className='dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'
+							className='dropdown-content z-[1] menu p-2 shadow bg-gray-800 rounded-box w-52 border border-green-400'
 						>
 							<li>
-								<a onClick={deleteNotifications}>Delete all notifications</a>
+								<a onClick={deleteNotifications} className='text-green-300 font-mono hover:bg-gray-700'>git clean --all</a>
 							</li>
 						</ul>
 					</div>
@@ -71,21 +71,22 @@ const NotificationPage = () => {
 						<LoadingSpinner size='lg' />
 					</div>
 				)}
-				{notifications?.length === 0 && <div className='text-center p-4 font-bold'>No notifications 🤔</div>}
+				{notifications?.length === 0 && <div className='text-center p-4 font-bold text-green-500 font-mono'>No notifications yet 🤔</div>}
 				{notifications?.map((notification) => (
-					<div className='border-b border-gray-700' key={notification._id}>
+					<div className='border-b border-green-400' key={notification._id}>
 						<div className='flex gap-2 p-4'>
-							{notification.type === "follow" && <FaUser className='w-7 h-7 text-primary' />}
-							{notification.type === "like" && <FaHeart className='w-7 h-7 text-red-500' />}
+							{notification.type === "follow" && <FaUser className='w-7 h-7 text-green-400' />}
+							{notification.type === "like" && <FaHeart className='w-7 h-7 text-pink-500' />}
 							<Link to={`/profile/${notification.from.username}`}>
 								<div className='avatar'>
-									<div className='w-8 rounded-full'>
-										<img src={notification.from.profileImg || "/avatar-placeholder.png"} />
+									<div className='w-8 rounded-full border border-green-400'>
+										<img src={notification.from.profileImg || "/avatars/boy5.jpg"} />
 									</div>
 								</div>
 								<div className='flex gap-1'>
-									<span className='font-bold'>@{notification.from.username}</span>{" "}
-									{notification.type === "follow" ? "followed you" : "liked your post"}
+									<span className='font-bold text-green-300 font-mono'>@{notification.from.username}</span>{" "}
+									{notification.type === "follow" ? "started following you" : "liked your commit"}
+									<span className='text-green-500 font-mono'>{notification.type === "follow" ? "(git follow)" : "(git star)"}</span>
 								</div>
 							</Link>
 						</div>

@@ -1,110 +1,129 @@
 import { CiImageOn } from "react-icons/ci";
-import { BsEmojiSmileFill } from "react-icons/bs";
 import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
+
 const CreatePost = () => {
-	const [text, setText] = useState("");
-	const [img, setImg] = useState(null);
-	const imgRef = useRef(null);
+  const [text, setText] = useState("");
+  const [img, setImg] = useState(null);
+  const imgRef = useRef(null);
 
-	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
-	const queryClient = useQueryClient();
+  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  const queryClient = useQueryClient();
 
-	const {
-		mutate: createPost,
-		isPending,
-		isError,
-		error,
-	} = useMutation({
-		mutationFn: async ({ text, img }) => {
-			try {
-				const res = await fetch("/api/posts/create", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ text, img }),
-				});
-				const data = await res.json();
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
-				return data;
-			} catch (error) {
-				throw new Error(error);
-			}
-		},
+  const {
+  mutate: createPost,
+  isError,
+  error,
+  } = useMutation({
+  mutationFn: async ({ text, img }) => {
+ try {
+    const res = await fetch("/api/posts/create", {
+  method: "POST",
+  headers: {
+      "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ text, img }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+  throw new Error(data.error || "Something went wrong");
+    }
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+  },
+  onSuccess: () => {
+  setText("");
+  setImg(null);
+    toast.success("Post created successfully");
+  queryClient.invalidateQueries({ queryKey: ["posts"] });
+  },
+  });
 
-		onSuccess: () => {
-			setText("");
-			setImg(null);
-			toast.success("Post created successfully");
-			queryClient.invalidateQueries({ queryKey: ["posts"] });
-		},
-	});
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		createPost({ text, img });
-	};
+  // If git commit syntax is used, extract message, else post whole input
+  const parseCommitMessage = (input) => {
+    const match = input.match(/^\s*-git\s+commit\s+-m\s+"([^"]+)"\s*$/);
+    return match ? match[1] : null;
+  };
 
-	const handleImgChange = (e) => {
-		const file = e.target.files[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onload = () => {
-				setImg(reader.result);
-			};
-			reader.readAsDataURL(file);
-		}
-	};
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      const commitMsg = parseCommitMessage(text);
+      if (commitMsg) {
+        createPost({ text: commitMsg, img });
+      }
+      // If not git commit syntax, do nothing
+    }
+  };
 
-	return (
-		<div className='flex p-4 items-start gap-4 border-b border-gray-700'>
-			<div className='avatar'>
-				<div className='w-8 rounded-full'>
-					<img src={authUser.profileImg || "/avatar-placeholder.png"} />
-				</div>
-			</div>
-			<form className='flex flex-col gap-2 w-full' onSubmit={handleSubmit}>
-				<textarea
-					className='textarea w-full p-0 text-lg resize-none border-none focus:outline-none  border-gray-800'
-					placeholder='What is happening?!'
-					value={text}
-					onChange={(e) => setText(e.target.value)}
-				/>
-				{img && (
-					<div className='relative w-72 mx-auto'>
-						<IoCloseSharp
-							className='absolute top-0 right-0 text-white bg-gray-800 rounded-full w-5 h-5 cursor-pointer'
-							onClick={() => {
-								setImg(null);
-								imgRef.current.value = null;
-							}}
-						/>
-						<img src={img} className='w-full mx-auto h-72 object-contain rounded' />
-					</div>
-				)}
+  const handleImgChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    setImg(reader.result);
+  };
+  reader.readAsDataURL(file);
+  }
+  };
 
-				<div className='flex justify-between border-t py-2 border-t-gray-700'>
-					<div className='flex gap-1 items-center'>
-						<CiImageOn
-							className='fill-primary w-6 h-6 cursor-pointer'
-							onClick={() => imgRef.current.click()}
-						/>
-						<BsEmojiSmileFill className='fill-primary w-5 h-5 cursor-pointer' />
-					</div>
-					<input type='file' accept='image/*' hidden ref={imgRef} onChange={handleImgChange} />
-					<button className='btn btn-primary rounded-full btn-sm text-white px-4'>
-						{isPending ? "Posting..." : "Post"}
-					</button>
-				</div>
-				{isError && <div className='text-red-500'>{error.message}</div>}
-			</form>
-		</div>
-	);
+  return (
+    <div className="w-full border-b border-green-400/30 bg-gradient-to-br from-black via-gray-950 to-gray-900 p-8 font-mono shadow-2xl">
+      <form className="flex gap-4" autoComplete="off">
+        <div className="avatar flex-shrink-0">
+          <div className="w-14 h-14 rounded-full border-2 border-green-400/60 overflow-hidden flex items-center justify-center bg-black shadow-lg shadow-green-400/20 hover:shadow-green-400/40 transition-all duration-300">
+            <img src={authUser.profileImg || "/avatars/boy3.jpg"} className="w-full h-full object-cover rounded-full" />
+          </div>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="bg-gray-900/80 backdrop-blur-sm border border-green-400/40 rounded-xl px-4 py-4 flex items-center shadow-lg hover:shadow-green-400/10 transition-all duration-300 hover:border-green-400/60">
+            <span className="text-green-400 mr-2 text-base">$</span>
+            <input
+              type="text"
+              className="flex-1 bg-transparent outline-none text-green-400 placeholder-green-600/70 font-mono text-lg focus:placeholder-green-600/90 transition-all duration-200"
+              placeholder='-git commit -m "your message"'
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              spellCheck={false}
+              autoFocus
+            />
+          </div>
+          {img && (
+            <div className="relative w-full max-w-lg mx-auto mt-4">
+              <IoCloseSharp
+                className="absolute -top-2 -right-2 text-green-400 bg-gray-800/90 backdrop-blur-sm rounded-full w-7 h-7 cursor-pointer hover:bg-gray-700/90 hover:text-green-300 transition-all duration-200 shadow-lg z-10"
+                onClick={() => {
+                  setImg(null);
+                  imgRef.current.value = null;
+                }}
+              />
+              <img src={img} className="w-full h-72 object-cover rounded-xl border border-green-400/40 shadow-lg hover:shadow-green-400/20 transition-all duration-300" />
+            </div>
+          )}
+          <div className="flex justify-between items-center mt-4 gap-2">
+            <div className="flex gap-2 items-center">
+              <button
+                type="button"
+                className="bg-gradient-to-r from-green-900/80 to-green-800/80 hover:from-green-800/90 hover:to-green-700/90 text-green-400 px-4 py-2.5 rounded-lg flex items-center gap-2 backdrop-blur-sm border border-green-400/20 hover:border-green-400/40 transition-all duration-300 shadow-lg hover:shadow-green-400/20 text-sm"
+                onClick={() => imgRef.current.click()}
+              >
+                <CiImageOn className="w-5 h-5" />
+                <span>Attach Image</span>
+              </button>
+            </div>
+            <input type="file" accept="image/*" hidden ref={imgRef} onChange={handleImgChange} />
+          </div>
+          {isError && <div className="text-red-400 mt-3 text-sm bg-red-500/10 border border-red-400/20 rounded-lg p-3">{error.message}</div>}
+        </div>
+      </form>
+    </div>
+  );
 };
 export default CreatePost;

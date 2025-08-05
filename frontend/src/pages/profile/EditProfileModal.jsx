@@ -35,14 +35,14 @@ const EditProfileModal = ({ authUser }) => {
 	return (
 		<>
 			<button
-				className='btn btn-outline rounded-full btn-sm'
+				className='btn btn-outline rounded-full btn-sm border-green-400 text-green-400 hover:bg-green-400 hover:text-black font-mono'
 				onClick={() => document.getElementById("edit_profile_modal").showModal()}
 			>
-				Edit profile
+				git config --edit
 			</button>
 			<dialog id='edit_profile_modal' className='modal'>
-				<div className='modal-box border rounded-md border-gray-700 shadow-md'>
-					<h3 className='font-bold text-lg my-3'>Update Profile</h3>
+				<div className='modal-box border rounded-md border-green-400 shadow-md bg-gray-900'>
+					<h3 className='font-bold text-lg my-3 text-green-400 font-mono'>$ git config --global user.*</h3>
 					<form
 						className='flex flex-col gap-4'
 						onSubmit={(e) => {
@@ -54,7 +54,7 @@ const EditProfileModal = ({ authUser }) => {
 							<input
 								type='text'
 								placeholder='Full Name'
-								className='flex-1 input border border-gray-700 rounded p-2 input-md'
+								className='flex-1 input border border-green-400 rounded p-2 input-md bg-gray-800 text-green-300 font-mono'
 								value={formData.fullName}
 								name='fullName'
 								onChange={handleInputChange}
@@ -62,7 +62,7 @@ const EditProfileModal = ({ authUser }) => {
 							<input
 								type='text'
 								placeholder='Username'
-								className='flex-1 input border border-gray-700 rounded p-2 input-md'
+								className='flex-1 input border border-green-400 rounded p-2 input-md bg-gray-800 text-green-300 font-mono'
 								value={formData.username}
 								name='username'
 								onChange={handleInputChange}
@@ -72,14 +72,14 @@ const EditProfileModal = ({ authUser }) => {
 							<input
 								type='email'
 								placeholder='Email'
-								className='flex-1 input border border-gray-700 rounded p-2 input-md'
+								className='flex-1 input border border-green-400 rounded p-2 input-md bg-gray-800 text-green-300 font-mono'
 								value={formData.email}
 								name='email'
 								onChange={handleInputChange}
 							/>
 							<textarea
 								placeholder='Bio'
-								className='flex-1 input border border-gray-700 rounded p-2 input-md'
+								className='flex-1 input border border-green-400 rounded p-2 input-md bg-gray-800 text-green-300 font-mono'
 								value={formData.bio}
 								name='bio'
 								onChange={handleInputChange}
@@ -89,7 +89,7 @@ const EditProfileModal = ({ authUser }) => {
 							<input
 								type='password'
 								placeholder='Current Password'
-								className='flex-1 input border border-gray-700 rounded p-2 input-md'
+								className='flex-1 input border border-green-400 rounded p-2 input-md bg-gray-800 text-green-300 font-mono'
 								value={formData.currentPassword}
 								name='currentPassword'
 								onChange={handleInputChange}
@@ -97,7 +97,7 @@ const EditProfileModal = ({ authUser }) => {
 							<input
 								type='password'
 								placeholder='New Password'
-								className='flex-1 input border border-gray-700 rounded p-2 input-md'
+								className='flex-1 input border border-green-400 rounded p-2 input-md bg-gray-800 text-green-300 font-mono'
 								value={formData.newPassword}
 								name='newPassword'
 								onChange={handleInputChange}
@@ -106,13 +106,13 @@ const EditProfileModal = ({ authUser }) => {
 						<input
 							type='text'
 							placeholder='Link'
-							className='flex-1 input border border-gray-700 rounded p-2 input-md'
+							className='flex-1 input border border-green-400 rounded p-2 input-md bg-gray-800 text-green-300 font-mono'
 							value={formData.link}
 							name='link'
 							onChange={handleInputChange}
 						/>
-						<button className='btn btn-primary rounded-full btn-sm text-white'>
-							{isUpdatingProfile ? "Updating..." : "Update"}
+						<button className='btn bg-green-400 text-black hover:bg-green-500 rounded-full btn-sm font-mono'>
+							{isUpdatingProfile ? "git commit..." : "git commit"}
 						</button>
 					</form>
 				</div>
