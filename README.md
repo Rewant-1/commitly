@@ -6,36 +6,40 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-Database-green?style=for-the-badge&logo=mongodb)
 ![Tailwind](https://img.shields.io/badge/Tailwind-CSS-blue?style=for-the-badge&logo=tailwindcss)
 
-A developer-centric, terminal-inspired social media platform built with cutting-edge technologies. commitly combines the familiar aesthetics of command-line interfaces with modern social networking features, creating a unique platform tailored for developers.
+A premium, developer-centric social media platform built with cutting-edge technologies. commitly combines the familiar aesthetics of command-line interfaces with modern social networking features, creating a unique platform tailored specifically for developers and tech enthusiasts.
 
 ## 🌟 Live Demo
 
-[Visit commitly](http://localhost:3001) *(Local development server)*
+[Visit commitly](http://localhost:5000) *(Local development server)*
+
+> **Note**: This is a portfolio demonstration project showcasing modern full-stack development practices with a unique CLI-inspired design.
 
 ## 🚀 Features
 
 ### ✨ Terminal-Inspired Core Features
-- **�️ Full Terminal Aesthetic** - Complete terminal-style UI with green text on black background
-- **⌨️ Command Palette** - Ctrl+K to access powerful command interface with git-style commands
-- **�🔐 Authentication System** - Secure JWT-based authentication with bcrypt password hashing
-- **📝 Git-Style Posts** - Posts displayed as git commits with commit hashes and git-style metadata
-- **💬 SSH-Style Direct Messages** - Terminal-inspired DM system with command-line interface
-- **� CLI-Style Polls** - Create and vote on polls using terminal commands
-- **⚙️ Dotfile Configuration** - Edit your profile and settings in a vim-style configuration interface
 
-### 🎨 Developer-Centric Experience  
-- **🌙 Terminal Theme** - Authentic terminal colors and typography with customizable prompts
+- **🖥️ Full Terminal Aesthetic** - Complete terminal-style UI with green text on black background
+- **🔐 Secure Authentication System** - JWT-based authentication with bcrypt password hashing
+- **📝 Git-Style Posts** - Posts displayed as git commits with authentic developer terminology
+- **💬 CLI-Style Comments** - Terminal-inspired comment system with command-line interface
+- **⭐ Star System** - "Star" posts instead of traditional "likes" for developer appeal
+- **👥 Watch/Remotes System** - Follow users as "watching" and followers as "remotes"
+
+### 🎨 Developer-Centric Experience
+
+- **🌙 Terminal Theme** - Authentic terminal colors with green-on-black color scheme
 - **📱 Responsive Design** - Terminal interface that works perfectly on all devices
-- **⚡ Real-time Updates** - Live notifications and real-time data synchronization
-- **� Advanced Search** - Smart search functionality with autocomplete
-- **👥 User Discovery** - Intelligent user suggestions in terminal-style panels
+- **⚡ Real-time Updates** - Live data synchronization with React Query
+- **🔍 Advanced Features** - User discovery with "Who to watch" suggestions
+- **� Recently Starred** - Carousel of recently starred commits/posts
 
 ### 🛡️ Technical Excellence
+
 - **⚡ Performance Optimized** - Fast loading times and optimized bundle size
-- **🔄 Real-time Updates** - WebSocket-like experience with React Query
-- **📊 State Management** - Efficient state management with TanStack Query
+- **🔄 Real-time Updates** - Efficient state management with TanStack Query
+- **📊 Smart Caching** - Intelligent data caching and invalidation
 - **🔒 Security Best Practices** - Protected routes, input validation, and secure headers
-- **📱 Progressive Web App** - PWA capabilities for enhanced user experience
+- **📱 Modern Architecture** - Component-based architecture with React hooks
 
 ## 🛠️ Tech Stack
 
@@ -152,7 +156,13 @@ twitter/
    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
    ```
 
-5. **Start the development servers**
+5. **Seed the database with sample data**
+
+   ```bash
+   npm run seed
+   ```
+
+6. **Start the development servers**
    
    Backend (from root directory):
    ```bash
@@ -165,11 +175,36 @@ twitter/
    npm run dev
    ```
 
-6. **Access the application**
+7. **Access the application**
    - Frontend: `http://localhost:5173`
    - Backend API: `http://localhost:5000`
 
-## 🎯 API Endpoints
+## � Key Features Showcase
+
+### Terminal-Inspired UI
+- Authentic terminal green-on-black color scheme
+- Monospace fonts throughout the interface
+- CLI-style command prompts and navigation
+- Git terminology: "star" instead of "like", "watch" instead of "follow"
+
+### Developer Data Seeding
+The application comes with pre-populated developer-focused content:
+- **12 realistic developer profiles** with authentic bios and avatars
+- **15+ developer-themed posts** covering topics like:
+  - React/TypeScript development
+  - DevOps and Kubernetes
+  - AI/ML and code automation
+  - Security and authentication
+  - Real-time systems and WebSockets
+- **Realistic comments and interactions** between developer personas
+
+### Post Creation with Git Syntax
+Users can create posts using familiar git commit syntax:
+```bash
+-git commit -m "your message here"
+```
+
+## �🎯 API Endpoints
 
 ### Authentication
 - `POST /api/auth/signup` - User registration
