@@ -32,25 +32,54 @@ function App() {
 
 	if (isLoading) {
 		return (
-			<div className='h-screen flex justify-center items-center bg-gradient-to-br from-gray-900 via-black to-gray-800'>
+			<div className='h-screen flex justify-center items-center bg-[#101014]'>
 				<LoadingSpinner size='lg' />
 			</div>
 		);
 	}
 
 	return (
-		<div className='min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800'>
-			<div className='flex max-w-7xl mx-auto'>
-				{authUser && <Sidebar />}
-				<Routes>
-					<Route path='/' element={authUser ? <HomePage /> : <LandingPage />} />
-					<Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/' />} />
-					<Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to='/' />} />
-					<Route path='/notifications' element={authUser ? <NotificationPage /> : <Navigate to='/login' />} />
-					<Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to='/login' />} />
-				</Routes>
-				{authUser && <RightPanel />}
-			</div>
+		<div className='min-h-screen bg-[#101014]'>
+			<Routes>
+				<Route path='/login' element={<div className='max-w-md mx-auto'><LoginPage /></div>} />
+				<Route path='/signup' element={<div className='max-w-md mx-auto'><SignUpPage /></div>} />
+				<Route
+					path='/'
+					element={authUser ? (
+						<div className='flex max-w-7xl mx-auto'>
+							<Sidebar />
+							<HomePage />
+							<RightPanel />
+						</div>
+					) : (
+						<LandingPage />
+					)}
+				/>
+				<Route
+					path='/notifications'
+					element={authUser ? (
+						<div className='flex max-w-7xl mx-auto'>
+							<Sidebar />
+							<NotificationPage />
+							<RightPanel />
+						</div>
+					) : (
+						<Navigate to='/login' />
+					)}
+				/>
+				<Route
+					path='/profile/:username'
+					element={authUser ? (
+						<div className='flex max-w-7xl mx-auto'>
+							<Sidebar />
+							<ProfilePage />
+							<RightPanel />
+						</div>
+					) : (
+						<Navigate to='/login' />
+					)}
+				/>
+			</Routes>
 			<Toaster />
 		</div>
 	);

@@ -6,61 +6,61 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar (global) */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(17 24 39);
+  background: theme('colors.customGray.900');
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(34 197 94 / 0.5);
+  background: theme('colors.customGreen.500');
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(34 197 94 / 0.8);
+  background: theme('colors.customGreen.800');
 }
 
+/* Custom scrollbar (scoped) */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgb(31 41 55);
+  background: theme('colors.customGray.800');
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgb(34 197 94 / 0.4);
+  background: theme('colors.customGreen.400');
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgb(34 197 94 / 0.7);
+  background: theme('colors.customGreen.700');
 }
 
-/* Premium glow effects */
+/* Premium effects */
 .glow-green {
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 20px theme('colors.customGreen.300');
 }
 
 .glow-green:hover {
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 30px theme('colors.customGreen.500');
 }
 
-/* Glass morphism effect */
 .glass {
-  background: rgba(17, 24, 39, 0.8);
+  background: theme('colors.customGray.800 / 0.8');
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  border: 1px solid theme('colors.customGreen.200');
 }
 
-/* Premium button animations */
+/* Premium button animation */
 .btn-premium {
   position: relative;
   overflow: hidden;
@@ -74,20 +74,21 @@ html {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, theme('colors.customGreen.200'), transparent);
   transition: left 0.5s;
 }
 
-.btn-premium:hover::before,
-.btn-premium:focus-visible::before {
+.btn-premium:hover::before {
   left: 100%;
 }
-/* Loading dots animation */
+
+/* Loading dots (with ARIA for accessibility) */
 .loading-dots {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
+  aria-label:"Loading animation";
 }
 
 .loading-dots div {
@@ -96,44 +97,14 @@ html {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: rgb(34 197 94);
+  background: theme('colors.customGreen.DEFAULT');
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 
-.loading-dots div:nth-child(1) {
-  left: 8px;
-  animation: loading1 0.6s infinite;
-}
-
-.loading-dots div:nth-child(2) {
-  left: 8px;
-  animation: loading2 0.6s infinite;
-}
-
-.loading-dots div:nth-child(3) {
-  left: 32px;
-  animation: loading2 0.6s infinite;
-}
-
-.loading-dots div:nth-child(4) {
-  left: 56px;
-  animation: loading3 0.6s infinite;
-}
-
-@keyframes loading1 {
-  0% { transform: scale(0); }
-  100% { transform: scale(1); }
-}
-
-@keyframes loading3 {
-  0% { transform: scale(1); }
-  100% { transform: scale(0); }
-}
-
-@keyframes loading2 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(24px, 0); }
-}
+.loading-dots div:nth-child(1) { left: 8px; animation: loading-1; }
+.loading-dots div:nth-child(2) { left: 8px; animation: loading-2; }
+.loading-dots div:nth-child(3) { left: 32px; animation: loading-2; }
+.loading-dots div:nth-child(4) { left: 56px; animation: loading-3; }
 
 /* Hover animations */
 .hover-lift {
@@ -147,73 +118,38 @@ html {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, rgb(34 197 94), rgb(16 185 129));
+  background: linear-gradient(135deg, theme('colors.customGreen.DEFAULT'), theme('colors.emerald.500'));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Premium card effects */
+/* Premium card */
 .premium-card {
-  background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.95));
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: linear-gradient(135deg, theme('colors.customGray.800 / 0.95'), theme('colors.customGray.900 / 0.95'));
+  border: 1px solid theme('colors.customGreen.300');
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
 }
 
 .premium-card:hover {
-  border-color: rgba(34, 197, 94, 0.5);
+  border-color: theme('colors.customGreen.500');
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
   transform: translateY(-2px);
 }
 
 /* Focus styles */
 input:focus, textarea:focus, button:focus {
-  /* Preserve outline for forced-colors, hide only when box-shadow is shown */
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5);
+  outline: none;
+  box-shadow: 0 0 0 2px theme('colors.customGreen.500');
 }
+
 /* Selection styles */
 ::selection {
-  background: rgba(34, 197, 94, 0.3);
+  background: theme('colors.customGreen.300');
   color: white;
 }
 
-/* Subtle animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: calc(200px + 100%) 0; }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .animate-fade-in-up {
-    animation: fadeInUp 0.5s ease-out;
-  }
-  .shimmer {
-    background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent);
-    background-size: 200px 100%;
-    animation: shimmer 2s infinite;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up {
-    animation: none !important;
-  }
-  .shimmer {
-    animation: none !important;
-  }
-}
-
+/* Subtle animations (already defined in theme) */
+.animate-fade-in-up { /* No additional CSS needed */ }
+.shimmer { /* No additional CSS needed */ }

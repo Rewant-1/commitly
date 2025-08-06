@@ -14,29 +14,31 @@ const SignUpPage = () => {
 	const queryClient = useQueryClient();
 
 const { mutate, isError, isPending, error } = useMutation({
-	mutationFn: async ({ email, username, fullName, password }) => {
-		const res = await fetch("/api/auth/signup", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ email, username, fullName, password }),
-		});
-		let data;
-		try {
-			data = await res.json();
-		} catch (e) {
-			throw new Error("Invalid server response");
-		}
-		if (!res.ok) {
-			throw new Error(data?.error || "Failed to create account");
-		}
-		return data;
-	},
-	onSuccess: () => {
-		toast.success("Account created successfully");
-		queryClient.invalidateQueries({ queryKey: ["authUser"] });
-	},
+mutationFn: async ({ email, username, fullName, password }) => {
+	const res = await fetch("/api/auth/signup", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		credentials: "include",
+		body: JSON.stringify({ email, username, fullName, password }),
+	});
+	let data;
+	try {
+		data = await res.json();
+	} catch (e) {
+		throw new Error("Invalid server response");
+	}
+	if (!res.ok) {
+		throw new Error(data?.error || "Failed to create account");
+	}
+	return data;
+},
+onSuccess: () => {
+	toast.success("Account created successfully");
+	queryClient.invalidateQueries({ queryKey: ["authUser"] });
+	window.location.href = "/";
+},
 });
 
 	const handleSubmit = (e) => {
@@ -68,10 +70,10 @@ const { mutate, isError, isPending, error } = useMutation({
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-green-400 font-mono flex items-center justify-center">
-			<div className="w-full max-w-md mx-auto flex flex-col justify-center items-center" style={{ minHeight: '80vh' }}>
+		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-green-400 font-mono flex items-center justify-center px-0">
+			<div className="w-full max-w-md mx-auto mt-12">
 				{/* Terminal Header */}
-				<div className="bg-gradient-to-r from-gray-800 to-gray-700 rounded-t-xl border-2 border-green-400/60 p-4 shadow-xl">
+				<div className="bg-gradient-to-r from-gray-800 to-gray-700 rounded-t-xl border-2 border-green-400/60 p-4 shadow-xl w-full">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center space-x-3">
 							<div className="flex space-x-1">
@@ -86,7 +88,7 @@ const { mutate, isError, isPending, error } = useMutation({
 				</div>
 
 				{/* Main Content */}
-				<div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-sm border-x-2 border-b-2 border-green-400/60 rounded-b-xl p-8 shadow-2xl">
+				<div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-sm border-x-2 border-b-2 border-green-400/60 rounded-b-xl p-8 shadow-2xl w-full">
 					{/* Welcome Message */}
 					<div className="mb-8 space-y-3">
 						<div className="flex items-center space-x-2 text-green-400">
