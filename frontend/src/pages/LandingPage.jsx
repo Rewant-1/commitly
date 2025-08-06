@@ -144,7 +144,7 @@ const LandingPage = () => {
 
         {/* Call to Action */}
         <div className="text-center">
-          <p className="text-green-300/80 mb-8 text-lg">ready to start tweeting like a developer?</p>
+          <p className="text-green-300/80 mb-8 text-lg">ready to start committing like a developer?</p>
           <div className="flex justify-center gap-6">
             <Link 
               to="/signup" 

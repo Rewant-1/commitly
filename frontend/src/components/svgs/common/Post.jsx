@@ -1,6 +1,6 @@
 import { FaRegComment } from "react-icons/fa";
 import { BiRepost } from "react-icons/bi";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegStar, FaStar } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { useState } from "react";
@@ -139,7 +139,7 @@ const Post = ({ post }) => {
             className="block w-12 h-12 rounded-full overflow-hidden border-2 border-green-400/60 hover:border-green-400 transition-all duration-300 shadow-lg hover:shadow-green-400/30 hover:scale-105"
           >
             <img
-              src={postOwner.profileImg || "/avatars/boy4.jpg"}
+              src={postOwner.profileImg || "/avatar-placeholder.jpg"}
               className="w-full h-full object-cover"
             />
           </Link>
@@ -150,22 +150,22 @@ const Post = ({ post }) => {
           <div className="flex gap-3 items-center mb-2">
             <Link
               to={`/profile/${postOwner.username}`}
-              className="font-bold text-green-300 font-mono hover:text-green-200 transition-colors flex items-center gap-2"
+              className="font-bold text-cyan-400 font-mono hover:text-cyan-300 transition-colors flex items-center gap-2"
             >
               {postOwner.fullName}
               {/* Verified badge for some users */}
               {["alexcode", "ai_enthusiast", "cloud_expert"].includes(
                 postOwner.username
               ) && (
-                <div className="w-4 h-4 bg-green-400 rounded-full flex items-center justify-center">
+                <div className="w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
                   <div className="w-2 h-2 bg-gray-900 rounded-full"></div>
                 </div>
               )}
             </Link>
-            <span className="text-green-500/70 flex gap-2 text-sm font-mono">
+            <span className="text-purple-400/70 flex gap-2 text-sm font-mono">
               <Link
                 to={`/profile/${postOwner.username}`}
-                className="hover:text-green-400 transition-colors"
+                className="hover:text-purple-300 transition-colors"
               >
                 @{postOwner.username}
               </Link>
@@ -185,7 +185,7 @@ const Post = ({ post }) => {
             )}
           </div>
           <div className="flex flex-col gap-4 overflow-hidden">
-            <span className="text-green-100 font-mono leading-relaxed text-[15px] group-hover:text-green-50 transition-colors duration-300">
+            <span className="text-cyan-100 font-mono leading-relaxed text-[15px] group-hover:text-cyan-50 transition-colors duration-300">
               {post.text}
             </span>
             {post.img && (
@@ -241,7 +241,7 @@ const Post = ({ post }) => {
                           <div className="w-8 h-8 rounded-full border border-green-400/50 overflow-hidden shadow-lg">
                             <img
                               src={
-                                comment.user.profileImg || "/avatars/boy5.jpg"
+                                comment.user.profileImg || "/avatar-placeholder.jpg"
                               }
                               className="w-full h-full object-cover"
                             />
@@ -295,21 +295,21 @@ const Post = ({ post }) => {
               </div>
 
               <div
-                className="flex gap-2 items-center group/like cursor-pointer hover:bg-pink-400/10 rounded-full px-3 py-2 transition-all duration-300 hover:scale-105"
+                className="flex gap-2 items-center group/like cursor-pointer hover:bg-yellow-400/10 rounded-full px-3 py-2 transition-all duration-300 hover:scale-105"
                 onClick={handleLikePost}
               >
                 {isLiking && <LoadingSpinner size="sm" />}
                 {!isLiked && !isLiking && (
-                  <FaRegHeart className="w-4 h-4 text-green-500/70 group-hover/like:text-pink-400 transition-colors duration-200" />
+                  <FaRegStar className="w-4 h-4 text-green-500/70 group-hover/like:text-yellow-400 transition-colors duration-200" />
                 )}
                 {isLiked && !isLiking && (
-                  <FaRegHeart className="w-4 h-4 text-pink-400 animate-pulse" />
+                  <FaStar className="w-4 h-4 text-yellow-400 animate-pulse" />
                 )}
                 <span
                   className={`text-sm font-mono transition-colors duration-200 font-semibold ${
                     isLiked
-                      ? "text-pink-400"
-                      : "text-green-500/70 group-hover/like:text-pink-400"
+                      ? "text-yellow-400"
+                      : "text-green-500/70 group-hover/like:text-yellow-400"
                   }`}
                 >
                   {post.likes.length}

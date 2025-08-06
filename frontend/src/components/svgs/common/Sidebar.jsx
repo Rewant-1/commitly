@@ -2,11 +2,13 @@ import { MdHomeFilled } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
@@ -30,15 +32,27 @@ const Sidebar = () => {
       toast.error("Logout failed");
     },
   });
-  const { data: authUser } = useQuery({
+  const location = useLocation();
+  const isAuthRoute = ["/", "/notifications"].includes(location.pathname) || location.pathname.startsWith("/profile");
+  const { data: authUser, error } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
       const res = await fetch("/api/auth/me");
+      if (res.status === 401) {
+        throw new Error("Unauthorized");
+      }
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");
       return data;
-    }
+    },
+    enabled: isAuthRoute,
   });
+
+  // Redirect to login if unauthorized
+  if (error?.message === "Unauthorized") {
+    navigate("/auth/login");
+    return null;
+  }
 
   return (
     <div className="md:flex-[2_2_0] w-18 max-w-52 bg-[#101014] border-r border-green-400/60">

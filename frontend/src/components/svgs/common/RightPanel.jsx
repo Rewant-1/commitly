@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+
+import RecentLikes from "./RecentLikes";
 
 import useFollow from "../../../hooks/useFollow";
 
@@ -24,6 +26,19 @@ const RightPanel = () => {
   });
 
   const { follow, pendingId } = useFollow();
+  
+  const location = useLocation();
+  const isAuthRoute = ["/", "/notifications"].includes(location.pathname) || location.pathname.startsWith("/profile");
+  const { data: authUser } = useQuery({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      return data;
+    },
+    enabled: isAuthRoute,
+  });
 
   // Early return for empty state - maintain layout space
   if (suggestedUsers?.length === 0) {
@@ -37,7 +52,7 @@ const RightPanel = () => {
         <div className="bg-[#101014] border-2 border-green-400/60 rounded-xl shadow-xl">
           <div className="p-4 border-b border-green-400/30">
             <h3 className="text-lg font-semibold text-green-400 font-mono">
-              Who to follow
+              Who to watch
             </h3>
           </div>
           <div className="divide-y divide-green-400/10">
@@ -73,6 +88,8 @@ const RightPanel = () => {
             )}
           </div>
         </div>
+        {/* Recently Starred Commits */}
+        {authUser && <RecentLikes userId={authUser._id} />}
       </div>
     </div>
   );
@@ -134,10 +151,10 @@ const UserSuggestionItem = ({ user, onFollow, isPending, isLast }) => {
           {isPending ? (
             <div className="flex items-center space-x-1">
               <LoadingSpinner size="sm" />
-              <span>Following...</span>
+              <span>Watching...</span>
             </div>
           ) : (
-            "Follow"
+            "Watch"
           )}
         </button>
       </div>

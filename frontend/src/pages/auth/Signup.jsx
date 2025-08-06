@@ -10,7 +10,7 @@ const SignUpPage = () => {
 		fullName: "",
 		password: "",
 	});
-
+//idk bro but the borders of home page and righ panel recently liked posts kinda merge with each other, iwant that to get fixed
 	const queryClient = useQueryClient();
 
 const { mutate, isError, isPending, error } = useMutation({

@@ -86,7 +86,7 @@ const CreatePost = () => {
       <form className="flex gap-4" autoComplete="off">
         <div className="avatar flex-shrink-0">
           <div className="w-14 h-14 rounded-full border-2 border-green-400/60 overflow-hidden flex items-center justify-center bg-black shadow-lg shadow-green-400/20 hover:shadow-green-400/40 transition-all duration-300">
-            <img src={(authUser?.profileImg) ? authUser.profileImg : "/avatars/boy3.jpg"} className="w-full h-full object-cover rounded-full" />
+            <img src={authUser?.profileImg || "/avatar-placeholder.jpg"} className="w-full h-full object-cover rounded-full" />
           </div>
         </div>
         <div className="flex-1 min-w-0">

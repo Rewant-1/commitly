@@ -8,81 +8,115 @@ import ProfilePage from "./pages/profile/ProfilePage";
 import Sidebar from "./components/svgs/common/Sidebar";
 import RightPanel from "./components/svgs/common/RightPanel";
 import { Toaster } from "react-hot-toast";
-import { useQuery } from "@tanstack/react-query";
+import React from "react";
 import LoadingSpinner from "./components/svgs/common/LoadingSpinner";
 
+
+import { useLocation } from "react-router-dom";
+
 function App() {
-	const { data: authUser, isLoading } = useQuery({
-		queryKey: ["authUser"],
-		queryFn: async () => {
-			try {
-				const res = await fetch("/api/auth/me");
-				const data = await res.json();
-				if (data.error) return null;
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
-				return data;
-			} catch (error) {
-				throw new Error(error);
-			}
-		},
-		retry: false,
-	});
+  const location = useLocation();
+  const isProfileRoute = location.pathname.startsWith("/profile");
+  const isNotificationsRoute = location.pathname === "/notifications";
+  const isHomeRoute = location.pathname === "/";
+  // Only enable authUser query if on a protected route (not landing page) or if already authenticated
+  const [authUser, setAuthUser] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  React.useEffect(() => {
+    if (isHomeRoute || isNotificationsRoute || isProfileRoute) {
+      fetch("/api/auth/me")
+        .then(async (res) => {
+          if (!res.ok) {
+            setAuthUser(null);
+            setIsLoading(false);
+            return;
+          }
+          const data = await res.json();
+          setAuthUser(data);
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setAuthUser(null);
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, [location.pathname]);
 
-	if (isLoading) {
-		return (
-			<div className='h-screen flex justify-center items-center bg-[#101014]'>
-				<LoadingSpinner size='lg' />
-			</div>
-		);
-	}
+  if (isLoading) {
+    return (
+      <div className="h-screen flex justify-center items-center bg-[#101014]">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
 
-	return (
-		<div className='min-h-screen bg-[#101014]'>
-			<Routes>
-				<Route path='/login' element={<div className='max-w-md mx-auto'><LoginPage /></div>} />
-				<Route path='/signup' element={<div className='max-w-md mx-auto'><SignUpPage /></div>} />
-				<Route
-					path='/'
-					element={authUser ? (
-						<div className='flex max-w-7xl mx-auto'>
-							<Sidebar />
-							<HomePage />
-							<RightPanel />
-						</div>
-					) : (
-						<LandingPage />
-					)}
-				/>
-				<Route
-					path='/notifications'
-					element={authUser ? (
-						<div className='flex max-w-7xl mx-auto'>
-							<Sidebar />
-							<NotificationPage />
-							<RightPanel />
-						</div>
-					) : (
-						<Navigate to='/login' />
-					)}
-				/>
-				<Route
-					path='/profile/:username'
-					element={authUser ? (
-						<div className='flex max-w-7xl mx-auto'>
-							<Sidebar />
-							<ProfilePage />
-							<RightPanel />
-						</div>
-					) : (
-						<Navigate to='/login' />
-					)}
-				/>
-			</Routes>
-			<Toaster />
-		</div>
-	);
+  return (
+    <div className="min-h-screen bg-[#101014]">
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <div className="max-w-md mx-auto">
+              <LoginPage />
+            </div>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <div className="max-w-md mx-auto">
+              <SignUpPage />
+            </div>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            authUser ? (
+              <div className="flex max-w-7xl mx-auto">
+                <Sidebar />
+                <HomePage />
+                <RightPanel />
+              </div>
+            ) : (
+              <LandingPage />
+            )
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            authUser ? (
+              <div className="flex max-w-7xl mx-auto">
+                <Sidebar />
+                <NotificationPage />
+                <RightPanel />
+              </div>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/profile/:username"
+          element={
+            authUser ? (
+              <div className="flex max-w-7xl mx-auto">
+                <Sidebar />
+                <ProfilePage />
+                <RightPanel />
+              </div>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+      </Routes>
+      <Toaster />
+    </div>
+  );
 }
 
 export default App;

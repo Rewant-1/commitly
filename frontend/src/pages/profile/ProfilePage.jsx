@@ -101,10 +101,10 @@ const ProfilePage = () => {
                   <FaArrowLeft className="w-4 h-4 text-green-400" />
                 </Link>
                 <div className="flex flex-col">
-                  <p className="font-bold text-lg text-green-300 font-mono">
+                  <p className="font-bold text-lg text-cyan-300 font-mono">
                     {user?.fullName}
                   </p>
-                  <span className="text-sm text-green-500 font-mono">
+                  <span className="text-sm text-purple-400 font-mono">
                     {POSTS?.length} commits
                   </span>
                 </div>
@@ -144,7 +144,7 @@ const ProfilePage = () => {
                   <div className="w-32 rounded-full relative group/avatar border border-green-400">
                     <img
                       src={
-                        profileImg || user?.profileImg || "/avatars/boy5.jpg"
+                        profileImg || user?.profileImg || "/avatar-placeholder.jpg"
                       }
                     />
                     <div className="absolute top-5 right-3 p-1 bg-green-400 rounded-full group-hover/avatar:opacity-100 opacity-0 cursor-pointer">
@@ -167,8 +167,8 @@ const ProfilePage = () => {
                     disabled={pendingId === user?._id}
                   >
                     {pendingId === user?._id && "Loading..."}
-                    {pendingId !== user?._id && amIFollowing && "git unfollow"}
-                    {pendingId !== user?._id && !amIFollowing && "git follow"}
+                    {pendingId !== user?._id && amIFollowing && "git remote rm"}
+                    {pendingId !== user?._id && !amIFollowing && "git remote add"}
                   </button>
                 )}
                 {(coverImg || profileImg) && (
@@ -187,13 +187,13 @@ const ProfilePage = () => {
 
               <div className="flex flex-col gap-4 mt-14 px-4">
                 <div className="flex flex-col">
-                  <span className="font-bold text-lg text-green-300 font-mono">
+                  <span className="font-bold text-lg text-cyan-300 font-mono">
                     {user?.fullName}
                   </span>
-                  <span className="text-sm text-green-500 font-mono">
+                  <span className="text-sm text-purple-400 font-mono">
                     @{user?.username}
                   </span>
-                  <span className="text-sm my-1 text-green-200 font-mono">
+                  <span className="text-sm my-1 text-blue-200 font-mono">
                     {user?.bio}
                   </span>
                 </div>
@@ -226,22 +226,22 @@ const ProfilePage = () => {
                     className="flex gap-1 items-center hover:underline focus:outline-none"
                     onClick={() => setShowFollowing(true)}
                   >
-                    <span className="font-bold text-xs text-green-300 font-mono">
+                    <span className="font-bold text-xs text-yellow-300 font-mono">
                       {user?.following.length}
                     </span>
                     <span className="text-green-500 text-xs font-mono">
-                      Following
+                      Remotes
                     </span>
                   </button>
                   <button
                     className="flex gap-1 items-center hover:underline focus:outline-none"
                     onClick={() => setShowFollowers(true)}
                   >
-                    <span className="font-bold text-xs text-green-300 font-mono">
+                    <span className="font-bold text-xs text-yellow-300 font-mono">
                       {user?.followers.length}
                     </span>
                     <span className="text-green-500 text-xs font-mono">
-                      Followers
+                      Watching
                     </span>
                   </button>
                 </div>
@@ -250,12 +250,12 @@ const ProfilePage = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="bg-gray-900 border-2 border-green-400/60 rounded-xl p-6 w-full max-w-md mx-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-green-400 font-mono font-bold text-lg">Followers</h2>
+              <h2 className="text-green-400 font-mono font-bold text-lg">Watching</h2>
               <button className="text-green-400 font-bold text-xl" onClick={() => setShowFollowers(false)}>&times;</button>
             </div>
             <div className="max-h-72 overflow-y-auto">
               {user?.followers.length === 0 ? (
-                <p className="text-green-400/70 font-mono">No followers yet.</p>
+                <p className="text-green-400/70 font-mono">No watchers yet.</p>
               ) : (
                 user.followers.map((follower) => (
                   <div key={follower._id} className="flex items-center gap-3 py-2 border-b border-green-400/10">
@@ -277,12 +277,12 @@ const ProfilePage = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="bg-gray-900 border-2 border-green-400/60 rounded-xl p-6 w-full max-w-md mx-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-green-400 font-mono font-bold text-lg">Following</h2>
+              <h2 className="text-green-400 font-mono font-bold text-lg">Remotes</h2>
               <button className="text-green-400 font-bold text-xl" onClick={() => setShowFollowing(false)}>&times;</button>
             </div>
             <div className="max-h-72 overflow-y-auto">
               {user?.following.length === 0 ? (
-                <p className="text-green-400/70 font-mono">Not following anyone yet.</p>
+                <p className="text-green-400/70 font-mono">No remotes added yet.</p>
               ) : (
                 user.following.map((followed) => (
                   <div key={followed._id} className="flex items-center gap-3 py-2 border-b border-green-400/10">

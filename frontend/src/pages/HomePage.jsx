@@ -27,7 +27,7 @@ const HomePage = () => {
 						}`}
 						onClick={() => setFeedType("following")}
 					>
-						$ git log --follow
+						$ git log --remotes
 						{feedType === "following" && (
 							<div className='absolute bottom-0 w-10 h-1 rounded-full bg-green-400'></div>
 						)}
