@@ -5,7 +5,6 @@ import RecentLikes from "./RecentLikes";
 
 import useFollow from "../../../hooks/useFollow";
 
-import RightPanelSkeleton from "../../skeletons/RightPanelSkeleton";
 import LoadingSpinner from "./LoadingSpinner";
 
 const RightPanel = () => {
@@ -49,7 +48,7 @@ const RightPanel = () => {
     <div className="hidden lg:block w-80 flex-shrink-0">
       <div className="sticky top-0 space-y-4">
         {/* Who to Follow Card */}
-        <div className="bg-[#101014] border-2 border-green-400/60 rounded-xl shadow-xl">
+        <div className="bg-[#101014] border-r-2 border-b-2  border-green-400/60 rounded-xl shadow-xl ">
           <div className="p-4 border-b border-green-400/30">
             <h3 className="text-lg font-semibold text-green-400 font-mono">
               Who to watch
@@ -88,8 +87,12 @@ const RightPanel = () => {
             )}
           </div>
         </div>
-        {/* Recently Starred Commits */}
-        {authUser && <RecentLikes userId={authUser._id} />}
+        {authUser && (
+          <div className="bg-[#101014] border-t-2 border-r-2 border-b-2  border-green-400/60 rounded-xl shadow-xl ">
+            
+            <RecentLikes userId={authUser._id} />
+          </div>
+        )}
       </div>
     </div>
   );

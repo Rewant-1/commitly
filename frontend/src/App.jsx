@@ -19,11 +19,33 @@ function App() {
   const isProfileRoute = location.pathname.startsWith("/profile");
   const isNotificationsRoute = location.pathname === "/notifications";
   const isHomeRoute = location.pathname === "/";
-  // Only enable authUser query if on a protected route (not landing page) or if already authenticated
+  const isLoginRoute = location.pathname === "/login";
+  const isSignupRoute = location.pathname === "/signup";
   const [authUser, setAuthUser] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(true);
   React.useEffect(() => {
-    if (isHomeRoute || isNotificationsRoute || isProfileRoute) {
+    // Only fetch if not on landing, login, or signup
+    if (
+      (isHomeRoute || isNotificationsRoute || isProfileRoute) &&
+      !isLoginRoute &&
+      !isSignupRoute
+    ) {
+      fetch("/api/auth/me")
+        .then(async (res) => {
+          if (!res.ok) {
+            setAuthUser(null);
+            setIsLoading(false);
+            return;
+          }
+          const data = await res.json();
+          setAuthUser(data);
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setAuthUser(null);
+          setIsLoading(false);
+        });
+    } else if (isProfileRoute || isNotificationsRoute) {
       fetch("/api/auth/me")
         .then(async (res) => {
           if (!res.ok) {
@@ -42,7 +64,7 @@ function App() {
     } else {
       setIsLoading(false);
     }
-  }, [location.pathname]);
+  }, [location.pathname, isHomeRoute, isNotificationsRoute, isProfileRoute, isLoginRoute, isSignupRoute]);
 
   if (isLoading) {
     return (
