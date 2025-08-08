@@ -9,7 +9,7 @@ import userRoutes from "./routes/user.route.js";
 import postRoutes from "./routes/post.route.js";
 import notificationRoutes from "./routes/notification.route.js";
 
-import connectMongoDB from "./db/connectMongoDB.js";
+import connectMongoDB from "./db/connectMongoDb.js";
 
 // Load .env from parent directory (root of project)
 dotenv.config({ path: 'c:\\Users\\DELL\\OneDrive\\Desktop\\twitter\\.env' });
