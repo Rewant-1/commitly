@@ -14,6 +14,10 @@ const Posts = ({ feedType, username, userId }) => {
 				return `/api/posts/user/${username}`;
 			case "likes":
 				return `/api/posts/likes/${userId}`;
+			case "bookmarks":
+				return `/api/posts/bookmarks/${userId}`;
+			case "reposts":
+				return `/api/posts/reposts/${userId}`;
 			default:
 				return "/api/posts/all";
 		}
@@ -45,7 +49,9 @@ const Posts = ({ feedType, username, userId }) => {
 	});
 
 	useEffect(() => {
-		refetch();
+		if (feedType === "bookmarks" || feedType === "reposts") {
+			refetch();
+		}
 	}, [feedType, refetch, username]);
 
 	return (

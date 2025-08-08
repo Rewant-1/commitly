@@ -227,3 +227,113 @@ export const getUserPosts = async (req, res) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
+
+// Toggle bookmark on a post for the current user
+export const bookmarkTogglePost = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const { id: postId } = req.params;
+
+		const post = await Post.findById(postId);
+		if (!post) return res.status(404).json({ error: "Post not found" });
+
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+
+		const alreadyBookmarked = user.bookmarkedPosts.some((p) => p.toString() === postId);
+
+		if (alreadyBookmarked) {
+			await User.updateOne({ _id: userId }, { $pull: { bookmarkedPosts: postId } });
+			return res.status(200).json({ bookmarked: false });
+		} else {
+			await User.updateOne({ _id: userId }, { $push: { bookmarkedPosts: postId } });
+			// Optional notification to post owner about bookmark
+			try {
+				if (post.user.toString() !== userId.toString()) {
+					const notification = new Notification({ from: userId, to: post.user, type: "bookmark" });
+					await notification.save();
+				}
+			} catch {}
+			return res.status(200).json({ bookmarked: true });
+		}
+	} catch (error) {
+		console.log("Error in bookmarkTogglePost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+// Toggle repost for the current user (adds to user's retweetedPosts and increments post.reposts list)
+export const repostTogglePost = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const { id: postId } = req.params;
+
+		const post = await Post.findById(postId);
+		if (!post) return res.status(404).json({ error: "Post not found" });
+
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+
+		const alreadyReposted = user.retweetedPosts.some((p) => p.toString() === postId);
+
+		if (alreadyReposted) {
+			await User.updateOne({ _id: userId }, { $pull: { retweetedPosts: postId } });
+			await Post.updateOne({ _id: postId }, { $pull: { reposts: userId } });
+			return res.status(200).json({ reposted: false, reposts: post.reposts.filter((u) => u.toString() !== userId.toString()) });
+		} else {
+			await User.updateOne({ _id: userId }, { $push: { retweetedPosts: postId } });
+			post.reposts.push(userId);
+			await post.save();
+
+			try {
+				if (post.user.toString() !== userId.toString()) {
+					const notification = new Notification({ from: userId, to: post.user, type: "repost" });
+					await notification.save();
+				}
+			} catch {}
+
+			return res.status(200).json({ reposted: true, reposts: post.reposts });
+		}
+	} catch (error) {
+		console.log("Error in repostTogglePost controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+// Get bookmarked posts of a user
+export const getBookmarkedPosts = async (req, res) => {
+	const userId = req.params.id;
+	try {
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+
+		const bookmarkedPosts = await Post.find({ _id: { $in: user.bookmarkedPosts } })
+			.populate({ path: "user", select: "-password" })
+			.populate({ path: "comments.user", select: "-password" })
+			.sort({ createdAt: -1 });
+
+		res.status(200).json(bookmarkedPosts);
+	} catch (error) {
+		console.log("Error in getBookmarkedPosts controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+// Get reposted posts of a user
+export const getRepostedPosts = async (req, res) => {
+	const userId = req.params.id;
+	try {
+		const user = await User.findById(userId);
+		if (!user) return res.status(404).json({ error: "User not found" });
+
+		const repostedPosts = await Post.find({ _id: { $in: user.retweetedPosts } })
+			.populate({ path: "user", select: "-password" })
+			.populate({ path: "comments.user", select: "-password" })
+			.sort({ createdAt: -1 });
+
+		res.status(200).json(repostedPosts);
+	} catch (error) {
+		console.log("Error in getRepostedPosts controller: ", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};

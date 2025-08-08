@@ -23,11 +23,12 @@ const useFollow = () => {
 				throw new Error(error.message);
 			}
 		},
-		onSettled: () => {
+		onSettled: (userId) => {
 			setPendingId(null);
 			Promise.all([
 				queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
 				queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+				queryClient.invalidateQueries({ queryKey: ["followers", userId] }),
 			]);
 		},
 		onError: (error) => {

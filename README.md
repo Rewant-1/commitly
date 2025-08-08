@@ -188,15 +188,7 @@ twitter/
 - Git terminology: "star" instead of "like", "watch" instead of "follow"
 
 ### Developer Data Seeding
-The application comes with pre-populated developer-focused content:
-- **12 realistic developer profiles** with authentic bios and avatars
-- **15+ developer-themed posts** covering topics like:
-  - React/TypeScript development
-  - DevOps and Kubernetes
-  - AI/ML and code automation
-  - Security and authentication
-  - Real-time systems and WebSockets
-- **Realistic comments and interactions** between developer personas
+The application comes with pre-populated developer-focused content.
 
 ### Post Creation with Git Syntax
 Users can create posts using familiar git commit syntax:
@@ -298,29 +290,14 @@ Currently implements manual testing strategies. Future enhancements will include
 4. Push to branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- **Design Inspiration**: Modern social media platforms
+- **Design Inspiration**: Github/ CLI
 - **Icons**: React Icons library
 - **UI Components**: DaisyUI and Tailwind CSS
 - **Fonts**: Google Fonts (Inter)
 - **Images**: Unsplash for demo content
 
-## 📞 Contact
 
-**Your Name** - [your.email@example.com](mailto:your.email@example.com)
 
-**Project Link**: [https://github.com/yourusername/commitly](https://github.com/yourusername/commitly)
-
-**Portfolio**: [https://yourportfolio.com](https://yourportfolio.com)
-
----
-
-<div align="center">
-  <p>Built with ❤️ to showcase full-stack development skills</p>
-  <p>⭐ Star this repo if you found it helpful!</p>
-</div>

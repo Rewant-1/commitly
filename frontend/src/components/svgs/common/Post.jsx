@@ -1,7 +1,7 @@
 import { FaRegComment } from "react-icons/fa";
 import { BiRepost } from "react-icons/bi";
 import { FaRegStar, FaStar } from "react-icons/fa";
-import { FaRegBookmark } from "react-icons/fa6";
+import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -25,6 +25,8 @@ const Post = ({ post }) => {
   const queryClient = useQueryClient();
   const postOwner = post.user;
   const isLiked = post.likes.includes(authUser._id);
+  const isBookmarked = authUser?.bookmarkedPosts?.includes?.(post._id);
+  const hasReposted = authUser?.retweetedPosts?.includes?.(post._id);
 
   const isMyPost = authUser._id === post.user._id;
 
@@ -80,6 +82,56 @@ const Post = ({ post }) => {
     onError: (error) => {
       toast.error(error.message);
     },
+  });
+
+  const { mutate: toggleBookmark, isPending: isBookmarking } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/posts/bookmark/${post._id}`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      return data; // { bookmarked: boolean }
+    },
+    onSuccess: ({ bookmarked }) => {
+      // Update authUser cache
+      queryClient.setQueryData(["authUser"], (prev) => {
+        if (!prev) return prev;
+        const set = new Set(prev.bookmarkedPosts?.map(String) || []);
+        if (bookmarked) set.add(String(post._id)); else set.delete(String(post._id));
+        return { ...prev, bookmarkedPosts: Array.from(set) };
+      });
+
+      // Update posts cache
+      queryClient.setQueryData(["posts"], (old) => {
+        if (!old) return old;
+        return old.map((p) => (p._id === post._id ? { ...p, bookmarked } : p));
+      });
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const { mutate: toggleRepost, isPending: isReposting } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/posts/repost/${post._id}`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      return data; // { reposted, reposts }
+    },
+    onSuccess: ({ reposted }) => {
+      // Update authUser cache
+      queryClient.setQueryData(["authUser"], (prev) => {
+        if (!prev) return prev;
+        const set = new Set(prev.retweetedPosts?.map(String) || []);
+        if (reposted) set.add(String(post._id)); else set.delete(String(post._id));
+        return { ...prev, retweetedPosts: Array.from(set) };
+      });
+
+      // Update posts cache
+      queryClient.setQueryData(["posts"], (old) => {
+        if (!old) return old;
+        return old.map((p) => (p._id === post._id ? { ...p, reposted } : p));
+      });
+    },
+    onError: (e) => toast.error(e.message),
   });
 
   const { mutate: commentPost, isPending: isCommenting } = useMutation({
@@ -287,12 +339,23 @@ const Post = ({ post }) => {
                 </form>
               </dialog>
 
-              <div className="flex gap-2 items-center group/repost cursor-pointer hover:bg-blue-400/10 rounded-full px-3 py-2 transition-all duration-300 hover:scale-105">
-                <BiRepost className="w-5 h-5 text-green-500/70 group-hover/repost:text-blue-400 transition-colors" />
-                <span className="text-sm text-green-500/70 group-hover/repost:text-blue-400 font-mono transition-colors font-semibold">
-                  0
+              <button
+                type="button"
+                className="flex gap-2 items-center group/repost cursor-pointer hover:bg-blue-400/10 rounded-full px-3 py-2 transition-all duration-300 hover:scale-105 disabled:opacity-60"
+                onClick={() => !isReposting && toggleRepost()}
+                disabled={isReposting}
+                aria-label={hasReposted ? "Undo repost" : "Repost"}
+                title={hasReposted ? "Undo repost" : "Repost"}
+              >
+                {isReposting ? (
+                  <LoadingSpinner size="sm" />
+                ) : (
+                  <BiRepost className={`w-5 h-5 ${hasReposted ? "text-blue-400" : "text-green-500/70 group-hover/repost:text-blue-400"} transition-colors`} />
+                )}
+                <span className={`text-sm font-mono transition-colors font-semibold ${hasReposted ? "text-blue-400" : "text-green-500/70 group-hover/repost:text-blue-400"}`}>
+                  {post.reposts?.length || 0}
                 </span>
-              </div>
+              </button>
 
               <div
                 className="flex gap-2 items-center group/like cursor-pointer hover:bg-yellow-400/10 rounded-full px-3 py-2 transition-all duration-300 hover:scale-105"
@@ -317,7 +380,22 @@ const Post = ({ post }) => {
               </div>
             </div>
             <div className="flex items-center">
-              <FaRegBookmark className="w-4 h-4 text-green-500/70 cursor-pointer hover:text-green-400 transition-all duration-200 hover:scale-110" />
+              <button
+                type="button"
+                className="cursor-pointer"
+                onClick={() => !isBookmarking && toggleBookmark()}
+                disabled={isBookmarking}
+                aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
+                title={isBookmarked ? "Remove bookmark" : "Bookmark"}
+              >
+                {isBookmarking ? (
+                  <LoadingSpinner size="sm" />
+                ) : isBookmarked ? (
+                  <FaBookmark className="w-4 h-4 text-green-400" />
+                ) : (
+                  <FaRegBookmark className="w-4 h-4 text-green-500/70 hover:text-green-400 transition-all duration-200 hover:scale-110" />
+                )}
+              </button>
             </div>
           </div>
         </div>

@@ -318,6 +318,24 @@ const ProfilePage = () => {
                     <div className="absolute bottom-0 w-10  h-1 rounded-full bg-green-400" />
                   )}
                 </div>
+                <div
+                  className="flex justify-center flex-1 p-3 text-green-500 hover:bg-gray-800 transition duration-300 relative cursor-pointer font-mono"
+                  onClick={() => setFeedType("bookmarks")}
+                >
+                  git stash
+                  {feedType === "bookmarks" && (
+                    <div className="absolute bottom-0 w-10  h-1 rounded-full bg-green-400" />
+                  )}
+                </div>
+                <div
+                  className="flex justify-center flex-1 p-3 text-green-500 hover:bg-gray-800 transition duration-300 relative cursor-pointer font-mono"
+                  onClick={() => setFeedType("reposts")}
+                >
+                  git rebase --onto
+                  {feedType === "reposts" && (
+                    <div className="absolute bottom-0 w-10  h-1 rounded-full bg-green-400" />
+                  )}
+                </div>
               </div>
             </>
           )}
