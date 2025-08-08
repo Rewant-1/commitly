@@ -258,9 +258,7 @@ Users can create posts using familiar git commit syntax:
 - **Authentication**: JWT tokens with secure httpOnly cookies
 - **Password Security**: bcrypt hashing with salt rounds
 - **Input Validation**: Server-side validation for all inputs
-- **CORS**: Properly configured cross-origin requests
 - **Protected Routes**: Frontend and backend route protection
-- **XSS Protection**: Input sanitization and output encoding
 
 ## 🚦 Testing
 
