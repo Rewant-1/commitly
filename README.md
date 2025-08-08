@@ -10,7 +10,7 @@ A premium, developer-centric social media platform built with cutting-edge techn
 
 ## 🌟 Live Demo
 
-[Visit commitly](http://localhost:5000) *(Local development server)*
+[Visit commitly](https://commitly-152b.onrender.com) 
 
 > **Note**: This is a portfolio demonstration project showcasing modern full-stack development practices with a unique CLI-inspired design.
 
