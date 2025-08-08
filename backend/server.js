@@ -11,7 +11,6 @@ import notificationRoutes from "./routes/notification.route.js";
 
 import connectMongoDB from "./db/connectMongoDb.js";
 
-// Load .env from parent directory (root of project)
 dotenv.config({ path: 'c:\\Users\\DELL\\OneDrive\\Desktop\\twitter\\.env' });
 
 cloudinary.config({
@@ -24,9 +23,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
-app.use(express.json({ limit: "5mb" })); // to parse req.body
-// limit shouldn't be too high to prevent DOS
-app.use(express.urlencoded({ extended: true })); // to parse form data(urlencoded)
+app.use(express.json({ limit: "5mb" })); 
+app.use(express.urlencoded({ extended: true })); 
 
 app.use(cookieParser());
 
