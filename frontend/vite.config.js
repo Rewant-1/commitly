@@ -7,6 +7,9 @@ export default defineConfig({
   css: {
     postcss: './postcss.config.cjs',
   },
+  build: {
+    sourcemap: true,
+  },
   server: {
     port: 3000,
     proxy: {

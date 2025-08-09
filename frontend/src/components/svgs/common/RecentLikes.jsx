@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight, FaRegStar } from "react-icons/fa";
@@ -21,15 +21,19 @@ const RecentStars = ({ userId }) => {
     enabled: !!userId, // Only run query if userId exists
   });
 
-  // Listen for like/unlike mutations and refetch
-  queryClient.getMutationCache().subscribe((mutation) => {
-    if (
-      mutation.options?.mutationFn?.toString().includes("/api/posts/like/") &&
-      mutation.state.status === "success"
-    ) {
-      queryClient.invalidateQueries({ queryKey: ["starredPosts", userId] });
-    }
-  });
+  // Keep in sync with posts list invalidations (like/unlike/bookmark/repost)
+  useEffect(() => {
+    const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
+      if (event?.type === 'updated') {
+        // If any posts cache was updated, refresh recent likes
+        const key = event.query?.queryKey?.[0];
+        if (key === 'posts') {
+          queryClient.invalidateQueries({ queryKey: ["starredPosts", userId] });
+        }
+      }
+    });
+    return () => unsubscribe?.();
+  }, [queryClient, userId]);
 
   const nextPost = () => {
     if (starredPosts && currentIndex < starredPosts.length - 1) {

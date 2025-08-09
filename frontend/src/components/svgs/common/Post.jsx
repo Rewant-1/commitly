@@ -72,14 +72,15 @@ const Post = ({ post }) => {
       }
     },
     onSuccess: (updatedLikes) => {
-      queryClient.setQueryData(["posts"], (oldData) => {
-        return oldData.map((p) => {
-          if (p?._id === post?._id) {
-            return { ...p, likes: updatedLikes };
-          }
-          return p;
-        });
+      // Update all posts lists in cache (any feed)
+      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) => {
+        if (!Array.isArray(old)) return old;
+        return old.map((p) => (p?._id === post?._id ? { ...p, likes: updatedLikes } : p));
       });
+      // Invalidate all post lists so dependent widgets refresh
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      // Refresh RecentLikes for this user
+      queryClient.invalidateQueries({ queryKey: ["starredPosts", authUser?._id] });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -102,11 +103,13 @@ const Post = ({ post }) => {
         return { ...prev, bookmarkedPosts: Array.from(set) };
       });
 
-      // Update posts cache
-      queryClient.setQueryData(["posts"], (old) => {
-        if (!old) return old;
+      // Update all posts lists in cache
+      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) => {
+        if (!Array.isArray(old)) return old;
         return old.map((p) => (p?._id === post?._id ? { ...p, bookmarked } : p));
       });
+  queryClient.invalidateQueries({ queryKey: ["posts"] });
+  queryClient.invalidateQueries({ queryKey: ["starredPosts", authUser?._id] });
     },
     onError: (e) => toast.error(e.message),
   });
@@ -127,11 +130,12 @@ const Post = ({ post }) => {
         return { ...prev, retweetedPosts: Array.from(set) };
       });
 
-      // Update posts cache
-      queryClient.setQueryData(["posts"], (old) => {
-        if (!old) return old;
+      // Update all posts lists in cache
+      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) => {
+        if (!Array.isArray(old)) return old;
         return old.map((p) => (p?._id === post?._id ? { ...p, reposted } : p));
       });
+  queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: (e) => toast.error(e.message),
   });

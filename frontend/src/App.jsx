@@ -3,10 +3,10 @@ import HomePage from "./pages/HomePage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignUpPage from "./pages/auth/Signup";
-import NotificationPage from "./pages/notification/NotificationPage";
-import ProfilePage from "./pages/profile/ProfilePage";
-import Sidebar from "./components/svgs/common/Sidebar";
-import RightPanel from "./components/svgs/common/RightPanel";
+const NotificationPage = React.lazy(() => import("./pages/notification/NotificationPage"));
+const ProfilePage = React.lazy(() => import("./pages/profile/ProfilePage"));
+const Sidebar = React.lazy(() => import("./components/svgs/common/Sidebar"));
+const RightPanel = React.lazy(() => import("./components/svgs/common/RightPanel"));
 import { Toaster } from "react-hot-toast";
 import React from "react";
 import LoadingSpinner from "./components/svgs/common/LoadingSpinner";
@@ -97,11 +97,13 @@ function App() {
           path="/"
           element={
             authUser ? (
-              <div className="flex max-w-7xl mx-auto">
-                <Sidebar />
-                <HomePage />
-                <RightPanel />
-              </div>
+              <React.Suspense fallback={<div className="flex max-w-7xl mx-auto"><div className="flex-1" /><LoadingSpinner size="lg" /><div className="flex-1" /></div>}>
+                <div className="flex max-w-7xl mx-auto">
+                  <Sidebar />
+                  <HomePage />
+                  <RightPanel />
+                </div>
+              </React.Suspense>
             ) : (
               <LandingPage />
             )
@@ -111,11 +113,13 @@ function App() {
           path="/notifications"
           element={
             authUser ? (
-              <div className="flex max-w-7xl mx-auto">
-                <Sidebar />
-                <NotificationPage />
-                <RightPanel />
-              </div>
+              <React.Suspense fallback={<div className="flex max-w-7xl mx-auto"><LoadingSpinner size="lg" /></div>}>
+                <div className="flex max-w-7xl mx-auto">
+                  <Sidebar />
+                  <NotificationPage />
+                  <RightPanel />
+                </div>
+              </React.Suspense>
             ) : (
               <Navigate to="/login" />
             )
@@ -125,11 +129,13 @@ function App() {
           path="/profile/:username"
           element={
             authUser ? (
-              <div className="flex max-w-7xl mx-auto">
-                <Sidebar />
-                <ProfilePage />
-                <RightPanel />
-              </div>
+              <React.Suspense fallback={<div className="flex max-w-7xl mx-auto"><LoadingSpinner size="lg" /></div>}>
+                <div className="flex max-w-7xl mx-auto">
+                  <Sidebar />
+                  <ProfilePage />
+                  <RightPanel />
+                </div>
+              </React.Suspense>
             ) : (
               <Navigate to="/login" />
             )

@@ -49,14 +49,15 @@ const Sidebar = () => {
   });
 
   // Redirect to login if unauthorized
-  if (error?.message === "Unauthorized") {
-    navigate("/auth/login");
+  if (error?.message === "Unauthorized" && isAuthRoute) {
+    // On protected pages redirect to login; on public pages ignore
+    navigate("/login");
     return null;
   }
 
   return (
     <div className="md:flex-[2_2_0] w-18 max-w-52 bg-[#101014] border-r border-green-400/60">
-      <div className="sticky top-0 left-0 h-screen flex flex-col border-r border-green-400/60 w-20 md:w-full bg-[#101014] relative z-10">
+  <div className="sticky top-0 left-0 z-10 h-screen flex flex-col border-r border-green-400/60 w-20 md:w-full bg-[#101014]">
         <Link to="/" className="flex justify-center md:justify-start">
           <div className="p-4 text-green-400 font-mono text-xl font-bold hover:text-green-300 transition-colors border-b border-green-400/20">
             <span className="hidden md:inline"> git --commitly</span>
@@ -110,7 +111,7 @@ const Sidebar = () => {
                 />
               </div>
             </div>
-            <div className="flex justify-between flex-1 hidden md:flex">
+            <div className="justify-between flex-1 hidden md:flex">
               <div>
                 <p className="text-green-400 font-mono text-sm font-semibold w-20 truncate group-hover:text-green-300">
                   {authUser?.fullName}

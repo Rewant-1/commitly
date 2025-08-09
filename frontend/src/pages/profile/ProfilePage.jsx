@@ -5,7 +5,7 @@ import Posts from "../../components/svgs/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
 import EditProfileModal from "./EditProfileModal";
 
-import { POSTS } from "../../utils/db/dummy";
+// Removed dummy POSTS import to reduce bundle size
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
@@ -104,8 +104,9 @@ const ProfilePage = () => {
                   <p className="font-bold text-lg text-cyan-300 font-mono">
                     {user?.fullName}
                   </p>
+                  {/* You can replace this with real post count if needed */}
                   <span className="text-sm text-purple-400 font-mono">
-                    {POSTS?.length} commits
+                    commits
                   </span>
                 </div>
               </div>

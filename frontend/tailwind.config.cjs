@@ -59,12 +59,7 @@ module.exports = {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: [
-      "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
-      "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
-      "forest", "aqua", "pastel", "fantasy", "wireframe", "black", "luxury",
-      "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night",
-      "coffee", "winter",
-    ],
+    // Reduce themes to only those actually used to cut unused CSS
+    themes: ["black"],
   },
 };
