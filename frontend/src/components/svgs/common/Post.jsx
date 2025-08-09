@@ -77,8 +77,6 @@ const Post = ({ post }) => {
         if (!Array.isArray(old)) return old;
         return old.map((p) => (p?._id === post?._id ? { ...p, likes: updatedLikes } : p));
       });
-      // Invalidate all post lists so dependent widgets refresh
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
       // Refresh RecentLikes for this user
       queryClient.invalidateQueries({ queryKey: ["starredPosts", authUser?._id] });
     },
@@ -108,8 +106,7 @@ const Post = ({ post }) => {
         if (!Array.isArray(old)) return old;
         return old.map((p) => (p?._id === post?._id ? { ...p, bookmarked } : p));
       });
-  queryClient.invalidateQueries({ queryKey: ["posts"] });
-  queryClient.invalidateQueries({ queryKey: ["starredPosts", authUser?._id] });
+      queryClient.invalidateQueries({ queryKey: ["starredPosts", authUser?._id] });
     },
     onError: (e) => toast.error(e.message),
   });
@@ -135,7 +132,6 @@ const Post = ({ post }) => {
         if (!Array.isArray(old)) return old;
         return old.map((p) => (p?._id === post?._id ? { ...p, reposted } : p));
       });
-  queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: (e) => toast.error(e.message),
   });
