@@ -12,11 +12,13 @@ const RecentStars = ({ userId }) => {
   const { data: starredPosts, isLoading } = useQuery({
     queryKey: ["starredPosts", userId],
     queryFn: async () => {
+      if (!userId) return [];
       const res = await fetch(`/api/posts/likes/${userId}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");
       return data.slice(0, 5); // Show 5 most recent
     },
+    enabled: !!userId, // Only run query if userId exists
   });
 
   // Listen for like/unlike mutations and refetch
@@ -105,19 +107,19 @@ const RecentStars = ({ userId }) => {
         </div>
       </div>
 
-      {currentPost && (
+      {currentPost && currentPost.user && (
         <div className="border border-green-400/20 rounded-lg p-3 bg-gradient-to-r from-gray-900/20 to-gray-800/20">
           <div className="flex items-center gap-2 mb-2">
             <img
-              src={currentPost.user.profileImg || "/avatar-placeholder.jpg"}
-              alt={currentPost.user.fullName}
+              src={currentPost.user?.profileImg || "/avatar-placeholder.jpg"}
+              alt={currentPost.user?.fullName || "User"}
               className="w-6 h-6 rounded-full border border-green-400/50"
             />
             <Link
-              to={`/profile/${currentPost.user.username}`}
+              to={`/profile/${currentPost.user?.username}`}
               className="text-green-400 font-mono text-sm hover:text-yellow-400 transition-colors"
             >
-              @{currentPost.user.username}
+              @{currentPost.user?.username}
             </Link>
             <span className="text-green-400/50 text-xs">·</span>
             <span className="text-green-400/50 text-xs font-mono">
@@ -137,7 +139,7 @@ const RecentStars = ({ userId }) => {
           <div className="flex items-center gap-4 mt-2 pt-2 border-t border-green-400/10">
             <span className="flex items-center gap-1 text-xs text-yellow-400 font-mono">
               <FaRegStar className="w-3 h-3" />
-              {currentPost.likes.length}
+              {currentPost.likes?.length || 0}
             </span>
           </div>
         </div>

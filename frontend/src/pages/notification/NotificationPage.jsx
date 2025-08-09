@@ -114,7 +114,7 @@ const NotificationPage = () => {
 					)}
 					
 					{notifications?.map((notification) => (
-						<div className='border-b border-green-400/20 hover:bg-green-400/5 transition-all duration-300 group' key={notification._id}>
+						<div className='border-b border-green-400/20 hover:bg-green-400/5 transition-all duration-300 group' key={notification?._id}>
 							<div className='flex gap-4 p-6 items-start'>
 								{/* Notification Icon */}
 								<div className="flex-shrink-0">

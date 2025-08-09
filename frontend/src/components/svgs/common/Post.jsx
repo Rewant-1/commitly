@@ -21,21 +21,23 @@ const Post = ({ post }) => {
       if (!res.ok) throw new Error(data.error || "Something went wrong");
       return data;
     },
+    retry: 1,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
   const queryClient = useQueryClient();
-  const postOwner = post.user;
-  const isLiked = post.likes.includes(authUser._id);
-  const isBookmarked = authUser?.bookmarkedPosts?.includes?.(post._id);
-  const hasReposted = authUser?.retweetedPosts?.includes?.(post._id);
+  const postOwner = post?.user;
+  const isLiked = post?.likes?.includes(authUser?._id);
+  const isBookmarked = authUser?.bookmarkedPosts?.includes?.(post?._id);
+  const hasReposted = authUser?.retweetedPosts?.includes?.(post?._id);
 
-  const isMyPost = authUser._id === post.user._id;
+  const isMyPost = authUser?._id === post?.user?._id;
 
-  const formattedDate = formatPostDate(post.createdAt);
+  const formattedDate = formatPostDate(post?.createdAt);
 
   const { mutate: deletePost, isPending: isDeleting } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch(`/api/posts/${post._id}`, {
+        const res = await fetch(`/api/posts/${post?._id}`, {
           method: "DELETE",
         });
         const data = await res.json();
@@ -57,7 +59,7 @@ const Post = ({ post }) => {
   const { mutate: likePost, isPending: isLiking } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch(`/api/posts/like/${post._id}`, {
+        const res = await fetch(`/api/posts/like/${post?._id}`, {
           method: "POST",
         });
         const data = await res.json();
@@ -72,7 +74,7 @@ const Post = ({ post }) => {
     onSuccess: (updatedLikes) => {
       queryClient.setQueryData(["posts"], (oldData) => {
         return oldData.map((p) => {
-          if (p._id === post._id) {
+          if (p?._id === post?._id) {
             return { ...p, likes: updatedLikes };
           }
           return p;
@@ -86,7 +88,7 @@ const Post = ({ post }) => {
 
   const { mutate: toggleBookmark, isPending: isBookmarking } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/posts/bookmark/${post._id}`, { method: "POST" });
+      const res = await fetch(`/api/posts/bookmark/${post?._id}`, { method: "POST" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");
       return data; // { bookmarked: boolean }
@@ -96,14 +98,14 @@ const Post = ({ post }) => {
       queryClient.setQueryData(["authUser"], (prev) => {
         if (!prev) return prev;
         const set = new Set(prev.bookmarkedPosts?.map(String) || []);
-        if (bookmarked) set.add(String(post._id)); else set.delete(String(post._id));
+        if (bookmarked) set.add(String(post?._id)); else set.delete(String(post?._id));
         return { ...prev, bookmarkedPosts: Array.from(set) };
       });
 
       // Update posts cache
       queryClient.setQueryData(["posts"], (old) => {
         if (!old) return old;
-        return old.map((p) => (p._id === post._id ? { ...p, bookmarked } : p));
+        return old.map((p) => (p?._id === post?._id ? { ...p, bookmarked } : p));
       });
     },
     onError: (e) => toast.error(e.message),
@@ -111,7 +113,7 @@ const Post = ({ post }) => {
 
   const { mutate: toggleRepost, isPending: isReposting } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/posts/repost/${post._id}`, { method: "POST" });
+      const res = await fetch(`/api/posts/repost/${post?._id}`, { method: "POST" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");
       return data; // { reposted, reposts }
@@ -121,14 +123,14 @@ const Post = ({ post }) => {
       queryClient.setQueryData(["authUser"], (prev) => {
         if (!prev) return prev;
         const set = new Set(prev.retweetedPosts?.map(String) || []);
-        if (reposted) set.add(String(post._id)); else set.delete(String(post._id));
+        if (reposted) set.add(String(post?._id)); else set.delete(String(post?._id));
         return { ...prev, retweetedPosts: Array.from(set) };
       });
 
       // Update posts cache
       queryClient.setQueryData(["posts"], (old) => {
         if (!old) return old;
-        return old.map((p) => (p._id === post._id ? { ...p, reposted } : p));
+        return old.map((p) => (p?._id === post?._id ? { ...p, reposted } : p));
       });
     },
     onError: (e) => toast.error(e.message),
@@ -137,7 +139,7 @@ const Post = ({ post }) => {
   const { mutate: commentPost, isPending: isCommenting } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch(`/api/posts/comment/${post._id}`, {
+        const res = await fetch(`/api/posts/comment/${post?._id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -179,6 +181,11 @@ const Post = ({ post }) => {
     likePost();
   };
 
+  // Early return if essential data is missing
+  if (!post || !postOwner) {
+    return null;
+  }
+
   return (
     <>
       <div className="group flex gap-4 items-start p-6 border-b border-green-400/20 bg-gradient-to-r from-gray-900/30 via-black/20 to-gray-900/30 backdrop-blur-sm hover:from-gray-900/50 hover:via-black/30 hover:to-gray-900/50 transition-all duration-500 relative overflow-hidden">
@@ -187,11 +194,11 @@ const Post = ({ post }) => {
 
         <div className="avatar flex-shrink-0 relative z-10">
           <Link
-            to={`/profile/${postOwner.username}`}
+            to={`/profile/${postOwner?.username}`}
             className="block w-12 h-12 rounded-full overflow-hidden border-2 border-green-400/60 hover:border-green-400 transition-all duration-300 shadow-lg hover:shadow-green-400/30 hover:scale-105"
           >
             <img
-              src={postOwner.profileImg || "/avatar-placeholder.jpg"}
+              src={postOwner?.profileImg || "/avatar-placeholder.jpg"}
               className="w-full h-full object-cover"
             />
           </Link>
@@ -201,13 +208,13 @@ const Post = ({ post }) => {
         <div className="flex flex-col flex-1 min-w-0 relative z-10">
           <div className="flex gap-3 items-center mb-2">
             <Link
-              to={`/profile/${postOwner.username}`}
+              to={`/profile/${postOwner?.username}`}
               className="font-bold text-cyan-400 font-mono hover:text-cyan-300 transition-colors flex items-center gap-2"
             >
-              {postOwner.fullName}
+              {postOwner?.fullName}
               {/* Verified badge for some users */}
               {["alexcode", "ai_enthusiast", "cloud_expert"].includes(
-                postOwner.username
+                postOwner?.username
               ) && (
                 <div className="w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
                   <div className="w-2 h-2 bg-gray-900 rounded-full"></div>
@@ -216,10 +223,10 @@ const Post = ({ post }) => {
             </Link>
             <span className="text-purple-400/70 flex gap-2 text-sm font-mono">
               <Link
-                to={`/profile/${postOwner.username}`}
+                to={`/profile/${postOwner?.username}`}
                 className="hover:text-purple-300 transition-colors"
               >
-                @{postOwner.username}
+                @{postOwner?.username}
               </Link>
               <span>·</span>
               <span>{formattedDate}</span>
@@ -238,9 +245,9 @@ const Post = ({ post }) => {
           </div>
           <div className="flex flex-col gap-4 overflow-hidden">
             <span className="text-cyan-100 font-mono leading-relaxed text-[15px] group-hover:text-cyan-50 transition-colors duration-300">
-              {post.text}
+              {post?.text}
             </span>
-            {post.img && (
+            {post?.img && (
               <div className="rounded-xl overflow-hidden border border-green-400/40 shadow-xl group-hover:border-green-400/60 transition-all duration-300 hover:shadow-green-400/20">
                 <img
                   src={post.img}
@@ -256,18 +263,18 @@ const Post = ({ post }) => {
                 className="flex gap-2 items-center cursor-pointer group/comment hover:bg-green-400/10 rounded-full px-3 py-2 transition-all duration-300 hover:scale-105"
                 onClick={() =>
                   document
-                    .getElementById("comments_modal" + post._id)
-                    .showModal()
+                    .getElementById("comments_modal" + post?._id)
+                    ?.showModal()
                 }
               >
                 <FaRegComment className="w-4 h-4 text-green-500/70 group-hover/comment:text-green-400 transition-colors" />
                 <span className="text-sm text-green-500/70 group-hover/comment:text-green-400 font-mono transition-colors font-semibold">
-                  {post.comments.length}
+                  {post?.comments?.length || 0}
                 </span>
               </div>
 
               <dialog
-                id={`comments_modal${post._id}`}
+                id={`comments_modal${post?._id}`}
                 className="modal border-none outline-none"
               >
                 <div className="modal-box rounded-xl border-2 border-green-400/60 bg-gradient-to-br from-gray-900 via-black to-gray-800 shadow-2xl backdrop-blur-xl">
@@ -276,7 +283,7 @@ const Post = ({ post }) => {
                     git log --comments
                   </h3>
                   <div className="flex flex-col gap-4 max-h-60 overflow-auto custom-scrollbar">
-                    {post.comments.length === 0 && (
+                    {(!post?.comments || post.comments.length === 0) && (
                       <div className="text-center py-8">
                         <div className="text-6xl mb-4 opacity-30">💭</div>
                         <p className="text-sm text-green-500/70 font-mono">
@@ -284,16 +291,16 @@ const Post = ({ post }) => {
                         </p>
                       </div>
                     )}
-                    {post.comments.map((comment) => (
+                    {post?.comments?.map((comment) => (
                       <div
-                        key={comment._id}
+                        key={comment?._id}
                         className="flex gap-3 items-start p-3 bg-gradient-to-r from-gray-800/40 to-gray-700/40 rounded-lg border border-green-400/20 hover:border-green-400/40 transition-all duration-300"
                       >
                         <div className="avatar flex-shrink-0">
                           <div className="w-8 h-8 rounded-full border border-green-400/50 overflow-hidden shadow-lg">
                             <img
                               src={
-                                comment.user.profileImg || "/avatar-placeholder.jpg"
+                                comment?.user?.profileImg || "/avatar-placeholder.jpg"
                               }
                               className="w-full h-full object-cover"
                             />
@@ -302,18 +309,18 @@ const Post = ({ post }) => {
                         <div className="flex flex-col flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="font-bold text-green-300 font-mono text-sm">
-                              {comment.user.fullName}
+                              {comment?.user?.fullName}
                             </span>
                             <span className="text-green-500/70 text-xs font-mono">
-                              @{comment.user.username}
+                              @{comment?.user?.username}
                             </span>
                           </div>
                           <div className="text-sm text-green-200 font-mono leading-relaxed">
-                            {comment.text}
+                            {comment?.text}
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )) || []}
                   </div>
                   <form
                     className="flex gap-3 items-center mt-6 pt-4 border-t border-green-400/30"
@@ -375,7 +382,7 @@ const Post = ({ post }) => {
                       : "text-green-500/70 group-hover/like:text-yellow-400"
                   }`}
                 >
-                  {post.likes.length}
+                  {post?.likes?.length || 0}
                 </span>
               </div>
             </div>

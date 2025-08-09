@@ -77,17 +77,17 @@ const RightPanel = () => {
               // User suggestions
               suggestedUsers?.map((user, index) => (
                 <UserSuggestionItem
-                  key={user._id}
+                  key={user?._id || index}
                   user={user}
                   onFollow={follow}
-                  isPending={pendingId === user._id}
+                  isPending={pendingId === user?._id}
                   isLast={index === suggestedUsers.length - 1}
                 />
               ))
             )}
           </div>
         </div>
-        {authUser && (
+        {authUser?._id && (
           <div className="bg-[#101014] border-t-2 border-r-2 border-b-2  border-green-400/60 rounded-xl shadow-xl ">
             
             <RecentLikes userId={authUser._id} />
@@ -103,12 +103,14 @@ const UserSuggestionItem = ({ user, onFollow, isPending, isLast }) => {
   const handleFollowClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    onFollow(user._id);
+    onFollow(user?._id);
   };
+
+  if (!user) return null;
 
   return (
     <Link
-      to={`/profile/${user.username}`}
+      to={`/profile/${user?.username}`}
       className={`
          block p-4 transition-colors duration-200
          hover:bg-green-400/5 focus:bg-green-400/10
@@ -121,18 +123,18 @@ const UserSuggestionItem = ({ user, onFollow, isPending, isLast }) => {
           {/* Avatar */}
           <div className="relative flex-shrink-0">
             <img
-              src={user.profileImg || "/avatar-placeholder.jpg"}
-              alt={`${user.fullName}'s profile`}
+              src={user?.profileImg || "/avatar-placeholder.jpg"}
+              alt={`${user?.fullName || 'User'}'s profile`}
               className="w-10 h-10 rounded-full object-cover ring-2 ring-green-400/30 hover:ring-green-400 transition-all duration-200"
             />
           </div>
           {/* User info */}
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-green-400 truncate font-mono">
-              {user.fullName}
+              {user?.fullName}
             </p>
             <p className="text-sm text-green-400/70 truncate font-mono">
-              @{user.username}
+              @{user?.username}
             </p>
           </div>
         </div>
