@@ -43,7 +43,8 @@ Note: The frontend README references localhost for development; the link above i
 - **Security Best Practices** - Protected routes, input validation, and secure headers
 - **Modern Architecture** - Component-based architecture with React hooks
 
-## Tech Stac
+## Tech Stack
+
 ### Frontend
 - **React 18.2.0** - Modern React with hooks and functional components
 - **React Router DOM** - Client-side routing and navigation
