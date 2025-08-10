@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useAuth from '../../context/useAuth';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const { mutate: loginMutation, isPending, isError, error } = useMutation({
     mutationFn: async ({ username, password }) => {
@@ -18,13 +21,12 @@ const LoginPage = () => {
       if (!res.ok) throw new Error(data.error || 'Something went wrong');
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['authUser'] });
-      window.location.href = "/";
+      setUser(data);
+      navigate('/');
     },
-    onError: (error) => {
-      // Log error or handle globally if needed
-    },
+  onError: () => {},
   });
 
   const handleSubmit = (e) => {

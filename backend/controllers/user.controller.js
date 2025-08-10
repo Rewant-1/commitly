@@ -18,6 +18,10 @@ export const getUserProfile = async (req, res) => {
 			.populate({
 				path: "following",
 				select: "username fullName profileImg"
+			})
+			.populate({
+				path: "posts",
+				options: { sort: { createdAt: -1 } },
 			});
 		if (!user) return res.status(404).json({ message: "User not found" });
 

@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import useAuth from "../../context/useAuth";
 
 const SignUpPage = () => {
 	const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const SignUpPage = () => {
 	});
 
 	const queryClient = useQueryClient();
+	const navigate = useNavigate();
+	const { setUser } = useAuth();
 
 const { mutate, isError, isPending, error } = useMutation({
 mutationFn: async ({ email, username, fullName, password }) => {
@@ -34,10 +37,11 @@ mutationFn: async ({ email, username, fullName, password }) => {
 	}
 	return data;
 },
-onSuccess: () => {
+onSuccess: (data) => {
 	toast.success("Account created successfully");
 	queryClient.invalidateQueries({ queryKey: ["authUser"] });
-	window.location.href = "/";
+	setUser(data);
+	navigate('/');
 },
 });
 

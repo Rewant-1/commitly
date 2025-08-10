@@ -8,41 +8,42 @@
 
 A premium, developer-centric social media platform built with cutting-edge technologies. commitly combines the familiar aesthetics of command-line interfaces with modern social networking features, creating a unique platform tailored specifically for developers and tech enthusiasts.
 
-## 🌟 Live Demo
+## Live Demo
 
-[Visit commitly](https://commitly-152b.onrender.com) 
+[Visit commitly](https://commitly-152b.onrender.com)
+
+Note: The frontend README references localhost for development; the link above is the public demo.
 
 > **Note**: This is a portfolio demonstration project showcasing modern full-stack development practices with a unique CLI-inspired design.
 
-## 🚀 Features
+## Features
 
-### ✨ Terminal-Inspired Core Features
+### Terminal-Inspired Core Features
 
-- **🖥️ Full Terminal Aesthetic** - Complete terminal-style UI with green text on black background
-- **🔐 Secure Authentication System** - JWT-based authentication with bcrypt password hashing
-- **📝 Git-Style Posts** - Posts displayed as git commits with authentic developer terminology
-- **💬 CLI-Style Comments** - Terminal-inspired comment system with command-line interface
-- **⭐ Star System** - "Star" posts instead of traditional "likes" for developer appeal
-- **👥 Watch/Remotes System** - Follow users as "watching" and followers as "remotes"
+- **Full Terminal Aesthetic** - Complete terminal-style UI with green text on black background
+- **Secure Authentication System** - JWT-based authentication with bcrypt password hashing
+- **Git-Style Posts** - Posts displayed as git commits with authentic developer terminology
+- **CLI-Style Comments** - Terminal-inspired comment system with command-line interface
+- **Star System** - "Star" posts instead of traditional "likes" for developer appeal
+- **Watch/Remotes System** - Follow users as "watching" and followers as "remotes"
 
-### 🎨 Developer-Centric Experience
+### Developer-Centric Experience
 
-- **🌙 Terminal Theme** - Authentic terminal colors with green-on-black color scheme
-- **📱 Responsive Design** - Terminal interface that works perfectly on all devices
-- **⚡ Real-time Updates** - Live data synchronization with React Query
-- **🔍 Advanced Features** - User discovery with "Who to watch" suggestions
-- **� Recently Starred** - Carousel of recently starred commits/posts
+- **Terminal Theme** - Authentic terminal colors with green-on-black color scheme
+- **Responsive Design** - Terminal interface that works perfectly on all devices
+- **Real-time Updates** - Live data synchronization with React Query
+- **Advanced Features** - User discovery with "Who to watch" suggestions
+- **Recently Starred** - Carousel of recently starred commits/posts
 
-### 🛡️ Technical Excellence
+### Technical Excellence
 
-- **⚡ Performance Optimized** - Fast loading times and optimized bundle size
-- **🔄 Real-time Updates** - Efficient state management with TanStack Query
-- **📊 Smart Caching** - Intelligent data caching and invalidation
-- **🔒 Security Best Practices** - Protected routes, input validation, and secure headers
-- **📱 Modern Architecture** - Component-based architecture with React hooks
+- **Performance Optimized** - Fast loading times and optimized bundle size
+- **Real-time Updates** - Efficient state management with TanStack Query
+- **Smart Caching** - Intelligent data caching and invalidation
+- **Security Best Practices** - Protected routes, input validation, and secure headers
+- **Modern Architecture** - Component-based architecture with React hooks
 
-## 🛠️ Tech Stack
-
+## Tech Stac
 ### Frontend
 - **React 18.2.0** - Modern React with hooks and functional components
 - **React Router DOM** - Client-side routing and navigation
@@ -70,27 +71,33 @@ A premium, developer-centric social media platform built with cutting-edge techn
 - **Nodemon** - Automatic server restart during development
 - **PostCSS** - CSS post-processing and optimization
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-twitter/
+commitly/
 ├── backend/
 │   ├── controllers/          # Route controllers
 │   │   ├── auth.controller.js
-│   │   ├── notification.controller.js
-│   │   ├── post.controller.js
+   ```bash
+   git clone https://github.com/Rewant-1/commitly
+   cd commitly
+   ```
 │   │   └── user.controller.js
 │   ├── db/                   # Database configuration
-│   │   └── connectMongoDb.js
-│   ├── lib/utils/           # Utility functions
+   ```bash
+   npm install
+   ```
 │   │   └── generateToken.js
 │   ├── middleware/          # Custom middleware
-│   │   └── protectRoute.js
-│   ├── models/              # Database models
+   ```bash
+   cd frontend
+   npm install
+   cd ..
+   ```
 │   │   ├── notification.model.js
 │   │   ├── post.model.js
 │   │   └── user.model.js
-│   ├── routes/              # API routes
+   ```env
 │   │   ├── auth.route.js
 │   │   ├── notification.route.js
 │   │   ├── post.route.js
@@ -101,24 +108,24 @@ twitter/
 │   ├── src/
 │   │   ├── components/      # Reusable components
 │   │   ├── hooks/          # Custom React hooks
-│   │   ├── pages/          # Page components
-│   │   │   ├── auth/       # Authentication pages
-│   │   │   ├── notification/ # Notification pages
+   ```bash
+   npm run seed
+   ```
 │   │   │   ├── profile/    # Profile pages
 │   │   │   ├── LandingPage.jsx
 │   │   │   └── NotFoundPage.jsx
 │   │   ├── utils/          # Frontend utilities
-│   │   ├── App.jsx         # Main app component
-│   │   ├── main.jsx        # App entry point
-│   │   └── index.css       # Global styles
+   ```bash
+   npm run dev
+   ```
 │   ├── package.json
 │   └── vite.config.js      # Vite configuration
-├── logs/                   # Application logs
-├── package.json            # Root package configuration
-└── README.md
-```
+   ```bash
+   cd frontend
+   npm run dev
+   ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - **Node.js** (v14 or higher)
@@ -129,7 +136,7 @@ twitter/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/commitly.git
+   git clone https://github.com/Rewant-1/commitly
    cd commitly
    ```
 
@@ -179,7 +186,7 @@ twitter/
    - Frontend: `http://localhost:5173`
    - Backend API: `http://localhost:5000`
 
-## � Key Features Showcase
+## Key Features Showcase
 
 ### Terminal-Inspired UI
 - Authentic terminal green-on-black color scheme
@@ -196,7 +203,7 @@ Users can create posts using familiar git commit syntax:
 -git commit -m "your message here"
 ```
 
-## �🎯 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /api/auth/signup` - User registration
@@ -224,7 +231,7 @@ Users can create posts using familiar git commit syntax:
 - `GET /api/notifications` - Get user notifications
 - `DELETE /api/notifications` - Delete all notifications
 
-## 🎨 Design System
+## Design System
 
 ### Color Palette
 - **Primary Blue**: `#3B82F6` (Tailwind blue-500)
@@ -245,7 +252,7 @@ Users can create posts using familiar git commit syntax:
 - **Forms**: Clean inputs with focus states
 - **Navigation**: Sticky sidebar with active states
 
-## 📈 Performance Optimizations
+## Performance Optimizations
 
 - **Code Splitting**: Lazy loading for routes and components
 - **Image Optimization**: Cloudinary integration for responsive images
@@ -253,22 +260,29 @@ Users can create posts using familiar git commit syntax:
 - **Bundle Optimization**: Vite for fast builds and HMR
 - **Database**: Optimized MongoDB queries with proper indexing
 
-## 🔒 Security Features
+## Security Features
 
 - **Authentication**: JWT tokens with secure httpOnly cookies
 - **Password Security**: bcrypt hashing with salt rounds
 - **Input Validation**: Server-side validation for all inputs
 - **Protected Routes**: Frontend and backend route protection
 
-## 🚦 Testing
+## Testing
 
-Currently implements manual testing strategies. Future enhancements will include:
+Currently uses manual testing. Covered flows include:
+- Authentication: signup, login, logout, protected route redirects
+- Posts: create, delete, star/unstar, repost, bookmark, comment
+- Feeds: all posts, following feed, user timeline
+- Profile: edit profile, follow/unfollow, suggested users
+- Notifications: follow, like, repost notifications lifecycle
+
+Future enhancements will include:
 - Unit tests with Jest and React Testing Library
 - Integration tests for API endpoints
 - E2E tests with Cypress
 - Performance testing with Lighthouse
 
-## 📦 Deployment
+## Deployment
 
 ### Frontend (Netlify/Vercel)
 1. Build the frontend: `npm run build`
@@ -280,7 +294,7 @@ Currently implements manual testing strategies. Future enhancements will include
 2. Configure start script: `npm start`
 3. Ensure MongoDB connection string is updated
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
@@ -289,7 +303,7 @@ Currently implements manual testing strategies. Future enhancements will include
 5. Open a Pull Request
 
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Design Inspiration**: Github/ CLI
 - **Icons**: React Icons library

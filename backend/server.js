@@ -11,7 +11,8 @@ import notificationRoutes from "./routes/notification.route.js";
 
 import connectMongoDB from "./db/connectMongoDb.js";
 
-dotenv.config({ path: 'c:\\Users\\DELL\\OneDrive\\Desktop\\twitter\\.env' });
+// Load environment variables from .env in the project root
+dotenv.config();
 
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -41,10 +42,9 @@ if (process.env.NODE_ENV === "production") {
 	});
 }
 
-app.use((err, req, res, next) => {
-	console.error("Global Error Handler:", err.stack);
-	res.status(500).json({ error: "Internal Server Error" });
-});
+// Centralized error handling
+import errorHandler from "./middleware/errorHandler.js";
+app.use(errorHandler);
 
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);

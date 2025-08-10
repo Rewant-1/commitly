@@ -85,8 +85,15 @@ const userSchema = new mongoose.Schema(
 			default: '',
 		},
 	},
-	{ timestamps: true }
+	{ timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+// Virtual populate: posts authored by this user
+userSchema.virtual("posts", {
+	ref: "Post",
+	localField: "_id",
+	foreignField: "user",
+});
 
 const User = mongoose.model("User", userSchema);
 

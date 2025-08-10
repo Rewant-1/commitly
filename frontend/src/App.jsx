@@ -12,59 +12,10 @@ import React from "react";
 import LoadingSpinner from "./components/svgs/common/LoadingSpinner";
 
 
-import { useLocation } from "react-router-dom";
+import useAuth from "./context/useAuth";
 
 function App() {
-  const location = useLocation();
-  const isProfileRoute = location.pathname.startsWith("/profile");
-  const isNotificationsRoute = location.pathname === "/notifications";
-  const isHomeRoute = location.pathname === "/";
-  const isLoginRoute = location.pathname === "/login";
-  const isSignupRoute = location.pathname === "/signup";
-  const [authUser, setAuthUser] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-  React.useEffect(() => {
-    // Only fetch if not on landing, login, or signup
-    if (
-      (isHomeRoute || isNotificationsRoute || isProfileRoute) &&
-      !isLoginRoute &&
-      !isSignupRoute
-    ) {
-      fetch("/api/auth/me")
-        .then(async (res) => {
-          if (!res.ok) {
-            setAuthUser(null);
-            setIsLoading(false);
-            return;
-          }
-          const data = await res.json();
-          setAuthUser(data);
-          setIsLoading(false);
-        })
-        .catch(() => {
-          setAuthUser(null);
-          setIsLoading(false);
-        });
-    } else if (isProfileRoute || isNotificationsRoute) {
-      fetch("/api/auth/me")
-        .then(async (res) => {
-          if (!res.ok) {
-            setAuthUser(null);
-            setIsLoading(false);
-            return;
-          }
-          const data = await res.json();
-          setAuthUser(data);
-          setIsLoading(false);
-        })
-        .catch(() => {
-          setAuthUser(null);
-          setIsLoading(false);
-        });
-    } else {
-      setIsLoading(false);
-    }
-  }, [location.pathname, isHomeRoute, isNotificationsRoute, isProfileRoute, isLoginRoute, isSignupRoute]);
+  const { user: authUser, loading: isLoading } = useAuth();
 
   if (isLoading) {
     return (
