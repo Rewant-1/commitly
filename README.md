@@ -277,32 +277,6 @@ Currently uses manual testing. Covered flows include:
 - Profile: edit profile, follow/unfollow, suggested users
 - Notifications: follow, like, repost notifications lifecycle
 
-Future enhancements will include:
-- Unit tests with Jest and React Testing Library
-- Integration tests for API endpoints
-- E2E tests with Cypress
-- Performance testing with Lighthouse
-
-## Deployment
-
-### Frontend (Netlify/Vercel)
-1. Build the frontend: `npm run build`
-2. Deploy the `dist` folder to your hosting platform
-3. Configure environment variables
-
-### Backend (Railway/Heroku)
-1. Set up environment variables
-2. Configure start script: `npm start`
-3. Ensure MongoDB connection string is updated
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
 
 ## Acknowledgments
 
