@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import compression from "compression";
 import helmet from "helmet";
 import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
 
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
@@ -23,7 +24,7 @@ cloudinary.config({
 });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
 const __dirname = path.resolve();
 
 // Security headers
@@ -45,8 +46,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 
-if (process.env.NODE_ENV === "production") {
-	const distPath = path.join(__dirname, "/frontend/dist");
+const distPath = path.join(__dirname, "/frontend/dist");
+if (fs.existsSync(distPath)) {
 	// Cache-bust hashed assets aggressively
 	app.use((req, res, next) => {
 		if (/\.(?:js|css|png|jpg|jpeg|gif|svg|webp|avif|ico|ttf|woff2?)$/i.test(req.url)) {
@@ -67,7 +68,7 @@ if (process.env.NODE_ENV === "production") {
 import errorHandler from "./middleware/errorHandler.js";
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
 	console.log(`Server is running on port ${PORT}`);
 	connectMongoDB();
 });

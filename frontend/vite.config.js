@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [
   react(),
     // Defer non-critical CSS by converting <link rel="stylesheet"> to print+onload
@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => ({
     postcss: './postcss.config.cjs',
   },
   build: {
-    sourcemap: mode !== 'production',
+  sourcemap: false,
     cssCodeSplit: true,
     rollupOptions: {
       output: {
