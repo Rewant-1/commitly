@@ -6,9 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Commitly – a developer-themed social app where you post, star, and rebase your thoughts." />
     <title>commitly</title>
+    <style>
+      /* Minimal critical CSS to match initial theme and layout */
+      html, body { height: 100%; }
+      body { background-color: #101014; color: #d1fae5; }
+      #root { min-height: 100vh; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+  <link rel="modulepreload" href="/src/main.jsx" />
+  <script type="module" defer src="/src/main.jsx"></script>
   </body>
 </html>

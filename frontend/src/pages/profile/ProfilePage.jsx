@@ -116,6 +116,9 @@ const ProfilePage = () => {
                   src={coverImg || user?.coverImg || "/cover.png"}
                   className="h-52 w-full object-cover border border-green-400"
                   alt="cover image"
+                  width="1200"
+                  height="208"
+                  decoding="async"
                 />
                 {isMyProfile && (
                   <div
@@ -147,6 +150,10 @@ const ProfilePage = () => {
                       src={
                         profileImg || user?.profileImg || "/avatar-placeholder.jpg"
                       }
+                      width="128"
+                      height="128"
+                      alt="profile avatar"
+                      decoding="async"
                     />
                     <div className="absolute top-5 right-3 p-1 bg-green-400 rounded-full group-hover/avatar:opacity-100 opacity-0 cursor-pointer">
                       {isMyProfile && (
@@ -260,7 +267,7 @@ const ProfilePage = () => {
               ) : (
                 user.followers.map((follower) => (
                   <div key={follower._id} className="flex items-center gap-3 py-2 border-b border-green-400/10">
-                    <img src={follower.profileImg || "/avatar-placeholder.jpg"} alt={follower.fullName} className="w-8 h-8 rounded-full object-cover" />
+                    <img src={follower.profileImg || "/avatar-placeholder.jpg"} alt={follower.fullName} className="w-8 h-8 rounded-full object-cover" width="32" height="32" decoding="async" />
                     <div>
                       <span className="text-green-400 font-mono font-semibold">{follower.fullName}</span>
                       <span className="text-green-400/70 font-mono text-xs ml-2">@{follower.username}</span>
@@ -287,7 +294,7 @@ const ProfilePage = () => {
               ) : (
                 user.following.map((followed) => (
                   <div key={followed._id} className="flex items-center gap-3 py-2 border-b border-green-400/10">
-                    <img src={followed.profileImg || "/avatar-placeholder.jpg"} alt={followed.fullName} className="w-8 h-8 rounded-full object-cover" />
+                    <img src={followed.profileImg || "/avatar-placeholder.jpg"} alt={followed.fullName} className="w-8 h-8 rounded-full object-cover" width="32" height="32" decoding="async" />
                     <div>
                       <span className="text-green-400 font-mono font-semibold">{followed.fullName}</span>
                       <span className="text-green-400/70 font-mono text-xs ml-2">@{followed.username}</span>

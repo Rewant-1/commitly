@@ -2,7 +2,7 @@ import { CiImageOn } from "react-icons/ci";
 import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
+import toast from "../utils/toast";
 
 
 const CreatePost = () => {
@@ -86,7 +86,7 @@ const CreatePost = () => {
       <form className="flex gap-4" autoComplete="off">
         <div className="avatar flex-shrink-0">
           <div className="w-14 h-14 rounded-full border-2 border-green-400/60 overflow-hidden flex items-center justify-center bg-black shadow-lg shadow-green-400/20 hover:shadow-green-400/40 transition-all duration-300">
-            <img src={authUser?.profileImg || "/avatar-placeholder.jpg"} className="w-full h-full object-cover rounded-full" />
+            <img src={authUser?.profileImg || "/avatar-placeholder.jpg"} width="56" height="56" className="w-full h-full object-cover rounded-full" alt="avatar" decoding="async" />
           </div>
         </div>
         <div className="flex-1 min-w-0">
@@ -114,7 +114,7 @@ const CreatePost = () => {
                   }
                 }}
               />
-              <img src={img} className="w-full h-72 object-cover rounded-xl border border-green-400/40 shadow-lg hover:shadow-green-400/20 transition-all duration-300" />
+              <img src={img} width="640" height="288" className="w-full h-72 object-cover rounded-xl border border-green-400/40 shadow-lg hover:shadow-green-400/20 transition-all duration-300" alt="post attachment" decoding="async" />
             </div>
           )}
           <div className="flex justify-between items-center mt-4 gap-2">

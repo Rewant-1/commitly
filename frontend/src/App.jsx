@@ -3,16 +3,17 @@ import HomePage from "./pages/HomePage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignUpPage from "./pages/auth/Signup";
-const NotificationPage = React.lazy(() => import("./pages/notification/NotificationPage"));
-const ProfilePage = React.lazy(() => import("./pages/profile/ProfilePage"));
-const Sidebar = React.lazy(() => import("./components/svgs/common/Sidebar"));
-const RightPanel = React.lazy(() => import("./components/svgs/common/RightPanel"));
-import { Toaster } from "react-hot-toast";
+const NotificationPage = React.lazy(() => import(/* webpackPrefetch: true */ "./pages/notification/NotificationPage"));
+const ProfilePage = React.lazy(() => import(/* webpackPrefetch: true */ "./pages/profile/ProfilePage"));
+const Sidebar = React.lazy(() => import(/* webpackPreload: true */ "./components/svgs/common/Sidebar"));
+const RightPanel = React.lazy(() => import(/* webpackPrefetch: true */ "./components/svgs/common/RightPanel"));
 import React from "react";
 import LoadingSpinner from "./components/svgs/common/LoadingSpinner";
 
 
 import useAuth from "./context/useAuth";
+
+const ToasterLazy = React.lazy(() => import("react-hot-toast").then(m => ({ default: m.Toaster })));
 
 function App() {
   const { user: authUser, loading: isLoading } = useAuth();
@@ -93,7 +94,7 @@ function App() {
           }
         />
       </Routes>
-      <Toaster />
+  <React.Suspense fallback={null}><ToasterLazy /></React.Suspense>
     </div>
   );
 }

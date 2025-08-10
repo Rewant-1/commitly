@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
+import toast from "../../utils/toast";
 
 import LoadingSpinner from "../../components/svgs/common/LoadingSpinner";
 
@@ -136,7 +136,7 @@ const NotificationPage = () => {
 										<div className='flex gap-3 items-start'>
 											<div className='avatar flex-shrink-0'>
 												<div className='w-10 h-10 rounded-full border-2 border-green-400/50 overflow-hidden shadow-lg group-hover:border-green-400 transition-all duration-300'>
-													<img src={notification.from.profileImg || "/avatars/boy5.jpg"} className="w-full h-full object-cover" />
+													<img src={notification.from.profileImg || "/avatars/boy5.jpg"} width="40" height="40" className="w-full h-full object-cover" alt="avatar" decoding="async" />
 												</div>
 											</div>
 											<div className='flex-1 min-w-0'>

@@ -6,7 +6,7 @@ import { FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
+import toast from "../../../utils/toast";
 
 import LoadingSpinner from "./LoadingSpinner";
 import { formatPostDate } from "../../../utils/date/index";
@@ -200,6 +200,10 @@ const Post = ({ post }) => {
             <img
               src={postOwner?.profileImg || "/avatar-placeholder.jpg"}
               className="w-full h-full object-cover"
+              width="48"
+              height="48"
+              alt="avatar"
+              decoding="async"
             />
           </Link>
           {/* Online indicator */}
@@ -252,7 +256,11 @@ const Post = ({ post }) => {
                 <img
                   src={post.img}
                   className="w-full max-h-96 object-cover hover:scale-105 transition-transform duration-700"
-                  alt=""
+                  alt="post image"
+                  width="800"
+                  height="384"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             )}
@@ -303,6 +311,10 @@ const Post = ({ post }) => {
                                 comment?.user?.profileImg || "/avatar-placeholder.jpg"
                               }
                               className="w-full h-full object-cover"
+                              width="32"
+                              height="32"
+                              alt="avatar"
+                              decoding="async"
                             />
                           </div>
                         </div>

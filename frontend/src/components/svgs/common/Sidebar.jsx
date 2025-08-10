@@ -5,7 +5,7 @@ import { BiLogOut } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast from "../../../utils/toast";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -108,6 +108,9 @@ const Sidebar = () => {
                 <img
                   src={authUser?.profileImg || "/avatar-placeholder.jpg"}
                   alt="Avatar"
+                  width="40"
+                  height="40"
+                  decoding="async"
                 />
               </div>
             </div>
