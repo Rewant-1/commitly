@@ -18,10 +18,9 @@ const RecentStars = ({ userId }) => {
       if (!res.ok) throw new Error(data.error || "Something went wrong");
       return data.slice(0, 5); // Show 5 most recent
     },
-    enabled: !!userId, // Only run query if userId exists
+    enabled: !!userId, 
   });
 
-  // Keep in sync with posts list invalidations (like/unlike/bookmark/repost)
   useEffect(() => {
     const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
       if (event?.type === 'updated') {

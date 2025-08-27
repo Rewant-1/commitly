@@ -5,7 +5,6 @@ module.exports = {
   plugins: [
     require('tailwindcss'),
     require('autoprefixer'),
-    // Purge unused CSS in production builds only
     ...(process.env.NODE_ENV === 'production'
       ? [
           purgecss({
@@ -19,11 +18,11 @@ module.exports = {
             defaultExtractor: (content) => content.match(/[^\r\n\t\f\s\"'`<>!=:;(){}\[\],]+/g) || [],
             safelist: {
               standard: [
-                /^(from|to|via)-/, // gradients
+                /^(from|to|via)-/, 
                 /^(bg|text|border|shadow|ring|fill|stroke|animate|transition|duration|ease|delay|opacity|scale|translate|rotate|skew|backdrop|blur)-/,
                 /data-theme/,
                 /daisyui/,
-                // dynamic classes used by app
+                
                 /(w|h|max-w|max-h)-\d+/,
                 /(mx|my|px|py|m|p)-\d+/,
                 /rounded(-[a-z]+)?/,

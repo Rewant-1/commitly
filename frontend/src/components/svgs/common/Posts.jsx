@@ -31,7 +31,6 @@ const Posts = ({ feedType, username, userId }) => {
 		refetch,
 		isRefetching,
 	} = useQuery({
-		// Include params in key so switching tabs/users creates distinct caches
 		queryKey: ["posts", { feedType, username, userId, endpoint: POST_ENDPOINT }],
 		queryFn: async () => {
 			try {
@@ -47,7 +46,6 @@ const Posts = ({ feedType, username, userId }) => {
 				throw new Error(error);
 			}
 		},
-		// Only run when required params exist
 		enabled:
 			(feedType === "likes" || feedType === "bookmarks" || feedType === "reposts")
 				? Boolean(userId)
@@ -57,7 +55,6 @@ const Posts = ({ feedType, username, userId }) => {
 	});
 
 	useEffect(() => {
-		// Refetch on explicit param changes when query was disabled before
 		refetch();
 	}, [POST_ENDPOINT, feedType, username, userId, refetch]);
 

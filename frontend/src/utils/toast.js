@@ -1,4 +1,4 @@
-// Lazy toast wrapper to avoid loading react-hot-toast on initial render
+
 let toastModulePromise;
 const load = () => {
   if (!toastModulePromise) {
@@ -13,7 +13,6 @@ const makeCall = (method, args) => {
     if (method && t?.[method]) t[method](...args);
     else if (typeof fn === 'function') fn(...args);
   }).catch(() => {});
-  // Return undefined immediately to keep calls non-blocking; callers don't use return values.
   return undefined;
 };
 

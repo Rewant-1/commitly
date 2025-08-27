@@ -61,7 +61,7 @@ onSuccess: (data) => {
 			return;
 		}
 
-		// Password strength validation (optional)
+		// Password strength validation 
 		if (formData.password.length < 8) {
 			toast.error("Password must be at least 8 characters long");
 			return;

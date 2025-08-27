@@ -53,9 +53,8 @@ const CreatePost = () => {
   });
 
 
-  // If git commit syntax is used, extract message, else post whole input
   const parseCommitMessage = (input) => {
-    const match = input.match(/^\s*-git\s+commit\s+-m\s+"([^"]+)"\s*$/);
+    const match = input.match(/^\s*git\s+commit\s+-m\s+"([^"]+)"\s*$/);
     return match ? match[1] : null;
   };
 
@@ -66,7 +65,6 @@ const CreatePost = () => {
       if (commitMsg) {
         createPost({ text: commitMsg, img });
       }
-      // If not git commit syntax, do nothing
     }
   };
 
@@ -95,7 +93,7 @@ const CreatePost = () => {
             <input
               type="text"
               className="flex-1 bg-transparent outline-none text-green-400 placeholder-green-600/70 font-mono text-lg focus:placeholder-green-600/90 transition-all duration-200"
-              placeholder='-git commit -m "your message"'
+              placeholder='git commit -m "your message"'
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={handleKeyDown}

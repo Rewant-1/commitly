@@ -48,9 +48,7 @@ const Sidebar = () => {
     enabled: isAuthRoute,
   });
 
-  // Redirect to login if unauthorized
   if (error?.message === "Unauthorized" && isAuthRoute) {
-    // On protected pages redirect to login; on public pages ignore
     navigate("/login");
     return null;
   }

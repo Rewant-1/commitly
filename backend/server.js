@@ -14,7 +14,6 @@ import notificationRoutes from "./routes/notification.route.js";
 
 import connectMongoDB from "./db/connectMongoDb.js";
 
-// Load environment variables from .env in the project root
 dotenv.config();
 
 cloudinary.config({
@@ -27,13 +26,11 @@ const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 const __dirname = path.resolve();
 
-// Security headers
 app.use(helmet({
-	contentSecurityPolicy: false, // keep simple; can be tightened later
+	contentSecurityPolicy: false, 
 	crossOriginEmbedderPolicy: false,
 }));
 
-// Compression for faster asset delivery
 app.use(compression());
 
 app.use(express.json({ limit: "5mb" })); 
@@ -48,7 +45,7 @@ app.use("/api/notifications", notificationRoutes);
 
 const distPath = path.join(__dirname, "/frontend/dist");
 if (fs.existsSync(distPath)) {
-	// Cache-bust hashed assets aggressively
+	
 	app.use((req, res, next) => {
 		if (/\.(?:js|css|png|jpg|jpeg|gif|svg|webp|avif|ico|ttf|woff2?)$/i.test(req.url)) {
 			res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
@@ -57,14 +54,12 @@ if (fs.existsSync(distPath)) {
 	});
 	app.use(express.static(distPath, { extensions: ["html"], maxAge: "1y", immutable: true }));
 
-	// SPA fallback
+	
 	app.get("*", (req, res) => {
 		res.setHeader("Cache-Control", "no-cache");
 		res.sendFile(path.resolve(distPath, "index.html"));
 	});
 }
-
-// Centralized error handling
 import errorHandler from "./middleware/errorHandler.js";
 app.use(errorHandler);
 

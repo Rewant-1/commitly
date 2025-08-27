@@ -116,10 +116,34 @@ const Post = ({ post }) => {
       const res = await fetch(`/api/posts/repost/${post?._id}`, { method: "POST" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");
-      return data; // { reposted, reposts }
+      return data; // expected: { reposted: boolean, reposts: array|number }
     },
-    onSuccess: ({ reposted }) => {
-      // Update authUser cache
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["posts"] });
+      const previousPosts = queryClient.getQueryData(["posts"]);
+      // Optimistically toggle repost + adjust count
+      queryClient.setQueryData(["posts"], (old) => {
+        if (!Array.isArray(old)) return old;
+        return old.map((p) => {
+          if (p?._id !== post?._id) return p;
+          const currentlyReposted = Array.isArray(p.reposts)
+            ? p.reposts.some(r => String(r) === String(authUser?._id))
+            : (p.reposted || false);
+          let newCount;
+          if (Array.isArray(p.reposts)) {
+            newCount = currentlyReposted ? p.reposts.length - 1 : p.reposts.length + 1;
+          } else if (typeof p.reposts === 'number') {
+            newCount = currentlyReposted ? Math.max(0, p.reposts - 1) : p.reposts + 1;
+          } else {
+            newCount = currentlyReposted ? 0 : 1;
+          }
+          return { ...p, reposted: !currentlyReposted, reposts: newCount };
+        });
+      });
+      return { previousPosts };
+    },
+    onSuccess: ({ reposted, reposts }) => {
+      // Update authUser cache (track which posts user has reposted)
       queryClient.setQueryData(["authUser"], (prev) => {
         if (!prev) return prev;
         const set = new Set(prev.retweetedPosts?.map(String) || []);
@@ -127,13 +151,24 @@ const Post = ({ post }) => {
         return { ...prev, retweetedPosts: Array.from(set) };
       });
 
-      // Update all posts lists in cache
-      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) => {
+      const normalizedReposts = Array.isArray(reposts) ? reposts.length : reposts;
+
+      queryClient.setQueryData(["posts"], (old) => {
         if (!Array.isArray(old)) return old;
-        return old.map((p) => (p?._id === post?._id ? { ...p, reposted } : p));
+        return old.map((p) => (
+          p?._id === post?._id ? { ...p, reposted, reposts: normalizedReposts } : p
+        ));
       });
     },
-    onError: (e) => toast.error(e.message),
+    onError: (e, _vars, context) => {
+      if (context?.previousPosts) {
+        queryClient.setQueryData(["posts"], context.previousPosts);
+      }
+      toast.error(e.message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    }
   });
 
   const { mutate: commentPost, isPending: isCommenting } = useMutation({
@@ -372,7 +407,7 @@ const Post = ({ post }) => {
                   <BiRepost className={`w-5 h-5 ${hasReposted ? "text-blue-400" : "text-green-500/70 group-hover/repost:text-blue-400"} transition-colors`} />
                 )}
                 <span className={`text-sm font-mono transition-colors font-semibold ${hasReposted ? "text-blue-400" : "text-green-500/70 group-hover/repost:text-blue-400"}`}>
-                  {post.reposts?.length || 0}
+                  {Array.isArray(post.reposts) ? post.reposts.length : (typeof post.reposts === 'number' ? post.reposts : 0)}
                 </span>
               </button>
 

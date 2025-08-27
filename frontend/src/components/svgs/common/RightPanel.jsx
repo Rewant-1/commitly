@@ -38,8 +38,6 @@ const RightPanel = () => {
     },
     enabled: isAuthRoute,
   });
-
-  // Early return for empty state - maintain layout space
   if (suggestedUsers?.length === 0) {
     return <div className="hidden lg:block w-80 flex-shrink-0" />;
   }
@@ -47,7 +45,7 @@ const RightPanel = () => {
   return (
     <div className="hidden lg:block w-80 flex-shrink-0">
       <div className="sticky top-0 space-y-4">
-        {/* Who to Follow Card */}
+        
         <div className="bg-[#101014] border-r-2 border-b-2  border-green-400/60 rounded-xl shadow-xl ">
           <div className="p-4 border-b border-green-400/30">
             <h3 className="text-lg font-semibold text-green-400 font-mono">
@@ -56,7 +54,7 @@ const RightPanel = () => {
           </div>
           <div className="divide-y divide-green-400/10">
             {isLoading ? (
-              // Loading state
+             
               <>
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="p-4 animate-pulse">
@@ -74,7 +72,6 @@ const RightPanel = () => {
                 ))}
               </>
             ) : (
-              // User suggestions
               suggestedUsers?.map((user, index) => (
                 <UserSuggestionItem
                   key={user?._id || index}
@@ -98,7 +95,6 @@ const RightPanel = () => {
   );
 };
 
-// Extracted component for better maintainability
 const UserSuggestionItem = ({ user, onFollow, isPending, isLast }) => {
   const handleFollowClick = (e) => {
     e.preventDefault();
