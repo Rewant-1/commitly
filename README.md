@@ -14,8 +14,6 @@ A premium, developer-centric social media platform built with cutting-edge techn
 
 Note: The frontend README references localhost for development; the link above is the public demo.
 
-> **Note**: This is a portfolio demonstration project showcasing modern full-stack development practices with a unique CLI-inspired design.
-
 ## Features
 
 ### Terminal-Inspired Core Features

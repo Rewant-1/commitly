@@ -1,3 +1,4 @@
+// Dummy data for development and testing - sample posts for the feed
 export const POSTS = [
 	{
 		_id: "1",

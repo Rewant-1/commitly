@@ -1,3 +1,4 @@
+// Post-related routes - feed, create, like, comment, bookmark, repost functionality
 import express from "express";
 import { protectRoute } from "../middleware/protectRoute.js";
 import {
@@ -17,12 +18,18 @@ import {
 
 const router = express.Router();
 
-router.get("/all", protectRoute, getAllPosts);
-router.get("/following", protectRoute, getFollowingPosts);
-router.get("/likes/:id", protectRoute, getLikedPosts);
+// All post routes require authentication
+// Feed routes
+router.get("/all", protectRoute, getAllPosts);              // Main feed
+router.get("/following", protectRoute, getFollowingPosts);  // Following feed
+
+// User-specific post collections
+router.get("/likes/:id", protectRoute, getLikedPosts);      // Posts user liked
 router.get("/bookmarks/:id", protectRoute, getBookmarkedPosts);
 router.get("/reposts/:id", protectRoute, getRepostedPosts);
-router.get("/user/:username", protectRoute, getUserPosts);
+router.get("/user/:username", protectRoute, getUserPosts);  // User's posts
+
+// Post management
 router.post("/create", protectRoute, createPost);
 router.post("/like/:id", protectRoute, likeUnlikePost);
 router.post("/bookmark/:id", protectRoute, bookmarkTogglePost);

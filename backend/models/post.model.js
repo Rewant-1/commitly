@@ -1,18 +1,24 @@
+// Post model schema - defines structure for social media posts
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
 	{
+		// Post author reference
 		user: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 			required: true,
 		},
+		
+		// Post content
 		text: {
 			type: String,
 		},
 		img: {
-			type: String,
+			type: String, // Cloudinary URL for uploaded images
 		},
+		
+		// Social interactions
 		likes: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
@@ -25,6 +31,8 @@ const postSchema = new mongoose.Schema(
 				ref: "User",
 			},
 		],
+		
+		// Comments on the post
 		comments: [
 			{
 				text: {
@@ -39,7 +47,7 @@ const postSchema = new mongoose.Schema(
 			},
 		],
 	},
-	{ timestamps: true }
+	{ timestamps: true } // Add createdAt and updatedAt automatically
 );
 
 const Post = mongoose.model("Post", postSchema);

@@ -1,8 +1,11 @@
+// Main App component - handles routing and layout for commitly social app
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignUpPage from "./pages/auth/Signup";
+
+// Lazy load heavy components for better performance
 const NotificationPage = React.lazy(() => import(/* webpackPrefetch: true */ "./pages/notification/NotificationPage"));
 const ProfilePage = React.lazy(() => import(/* webpackPrefetch: true */ "./pages/profile/ProfilePage"));
 const Sidebar = React.lazy(() => import(/* webpackPreload: true */ "./components/svgs/common/Sidebar"));
@@ -10,14 +13,16 @@ const RightPanel = React.lazy(() => import(/* webpackPrefetch: true */ "./compon
 import React from "react";
 import LoadingSpinner from "./components/svgs/common/LoadingSpinner";
 
-
 import useAuth from "./context/useAuth";
 
+// Lazy load toast notifications to reduce initial bundle size
 const ToasterLazy = React.lazy(() => import("react-hot-toast").then(m => ({ default: m.Toaster })));
 
 function App() {
+  // Get current user authentication state
   const { user: authUser, loading: isLoading } = useAuth();
 
+  // Show loading spinner while checking auth status
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center bg-[#101014]">
@@ -29,6 +34,7 @@ function App() {
   return (
     <div className="min-h-screen bg-[#101014]">
       <Routes>
+        {/* Auth routes - accessible when not logged in */}
         <Route
           path="/login"
           element={
@@ -45,6 +51,8 @@ function App() {
             </div>
           }
         />
+        
+        {/* Home route - show feed if authenticated, landing page if not */}
         <Route
           path="/"
           element={
@@ -61,6 +69,8 @@ function App() {
             )
           }
         />
+        
+        {/* Protected routes - require authentication */}
         <Route
           path="/notifications"
           element={
@@ -94,7 +104,9 @@ function App() {
           }
         />
       </Routes>
-  <React.Suspense fallback={null}><ToasterLazy /></React.Suspense>
+      
+      {/* Global toast notifications */}
+      <React.Suspense fallback={null}><ToasterLazy /></React.Suspense>
     </div>
   );
 }

@@ -1,7 +1,9 @@
+// User model schema - defines user structure and relationships in MongoDB
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
 	{
+		// Basic user information
 		username: {
 			type: String,
 			required: true,
@@ -21,6 +23,8 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			unique: true,
 		},
+		
+		// Social connections
 		followers: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +39,8 @@ const userSchema = new mongoose.Schema(
 				default: [],
 			},
 		],
+		
+		// Profile customization
 		profileImg: {
 			type: String,
 			default: "",
@@ -47,11 +53,12 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: "",
 		},
-
 		link: {
 			type: String,
 			default: "",
 		},
+		
+		// User interaction history
 		likedPosts: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
@@ -80,12 +87,18 @@ const userSchema = new mongoose.Schema(
 				default: [],
 			},
 		],
+		
+		// Custom terminal theme field
 		dotfile: {
 			type: String,
 			default: '',
 		},
 	},
-	{ timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+	{ 
+		timestamps: true,           // Add createdAt and updatedAt fields
+		toJSON: { virtuals: true }, // Include virtual fields in JSON output
+		toObject: { virtuals: true } 
+	}
 );
 
 // Virtual populate: posts authored by this user

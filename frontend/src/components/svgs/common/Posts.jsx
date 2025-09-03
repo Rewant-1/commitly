@@ -1,9 +1,11 @@
+// Posts component - displays different types of post feeds based on feedType
 import Post from "./Post";
 import PostSkeleton from "../../skeletons/PostSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 const Posts = ({ feedType, username, userId }) => {
+	// Determine API endpoint based on feed type
 	const getPostEndpoint = () => {
 		switch (feedType) {
 			case "forYou":
@@ -25,6 +27,7 @@ const Posts = ({ feedType, username, userId }) => {
 
 	const POST_ENDPOINT = getPostEndpoint();
 
+	// Fetch posts using React Query for caching and loading states
 	const {
 		data: posts,
 		isLoading,
@@ -46,6 +49,7 @@ const Posts = ({ feedType, username, userId }) => {
 				throw new Error(error);
 			}
 		},
+		// Only fetch when required params are available
 		enabled:
 			(feedType === "likes" || feedType === "bookmarks" || feedType === "reposts")
 				? Boolean(userId)
@@ -54,12 +58,14 @@ const Posts = ({ feedType, username, userId }) => {
 				: true,
 	});
 
+	// Refetch posts when feed parameters change
 	useEffect(() => {
 		refetch();
 	}, [POST_ENDPOINT, feedType, username, userId, refetch]);
 
 	return (
 		<>
+			{/* Show loading skeletons while fetching */}
 			{(isLoading || isRefetching) && (
 				<div className='flex flex-col justify-center'>
 					<PostSkeleton />
@@ -67,9 +73,13 @@ const Posts = ({ feedType, username, userId }) => {
 					<PostSkeleton />
 				</div>
 			)}
+			
+			{/* Show message when no posts found */}
 			{!isLoading && !isRefetching && posts?.length === 0 && (
 				<p className='text-center my-4'>No posts in this tab. Switch 👻</p>
 			)}
+			
+			{/* Render posts list */}
 			{!isLoading && !isRefetching && posts && (
 				<div>
 					{posts.map((post) => (
@@ -80,4 +90,5 @@ const Posts = ({ feedType, username, userId }) => {
 		</>
 	);
 };
+
 export default Posts;
