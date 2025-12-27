@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import Post from "../models/post.model.js";
-import connectMongoDB from "../db/connectMongoDB.js";
+import connectMongoDb from "../db/connectMongoDb.js";
 
 const seedUsers = [
 	{
@@ -120,9 +120,9 @@ const seedPosts = [
 		username: "devops_ninja",
 	},
 	{
-		text: "AI-generated code review bot just caught a memory leak I completely missed! 🤖 The future of development is here. This saved hours of debugging.",
+		text: "Code review + profiling just helped catch a memory leak I missed. Fixed it and the app feels noticeably smoother now.",
 		img: "/posts/post2.jpg",
-		username: "ai_enthusiast",
+		username: "mikecoder",
 	},
 	{
 		text: "Refactored our entire authentication system to use OAuth 2.0 with refresh tokens. Security is no joke in 2024! 🔐 Also improved performance by 40%.",
@@ -146,9 +146,9 @@ const seedPosts = [
 		username: "rust_learner",
 	},
 	{
-		text: "Built a machine learning model for code completion. 93% accuracy on predicting the next line of code! 🧠 The future of IDE assistance is bright.",
+		text: "Spent the weekend improving our API performance: added indexes + pagination, and removed a couple of slow queries. Small changes, big difference.",
 		img: "/posts/post1.jpg",
-		username: "ai_enthusiast",
+		username: "cloud_expert",
 	},
 	{
 		text: "Migrated our monolith to serverless functions. Cold start times were concerning at first, but the scalability and cost savings are worth it! ☁️",
@@ -190,7 +190,7 @@ const seedComments = [
 		username: "cloud_expert",
 	},
 	{
-		text: "Which AI tool are you using? Sounds very promising!",
+		text: "Nice catch! What tooling helped you find it — profiler or logs?",
 		username: "mikecoder",
 	},
 	{
@@ -224,7 +224,7 @@ const seedDatabase = async () => {
 		console.log("🌱 Starting database seeding...");
 
 		// Connect to MongoDB
-		await connectMongoDB();
+		await connectMongoDb();
 
 		// Clear existing data
 		console.log("🗑️  Clearing existing data...");

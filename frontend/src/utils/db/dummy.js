@@ -34,7 +34,7 @@ export const POSTS = [
 	},
 	{
 		_id: "2",
-		text: "Working on a new microservices architecture with Docker and Kubernetes. The learning curve is steep but the scalability benefits are incredible! �",
+		text: "Working on a new microservices architecture with Docker and Kubernetes. The learning curve is steep but the scalability benefits are incredible! 📈",
 		user: {
 			username: "devops_ninja",
 			profileImg: "/avatars/boy2.jpg",
@@ -56,17 +56,17 @@ export const POSTS = [
 	},
 	{
 		_id: "3",
-		text: "AI-generated code review bot just caught a memory leak I completely missed! 🤖 The future of development is here. This saved hours of debugging.",
+		text: "Code review + profiling just helped catch a memory leak I missed. Fixed it and the app feels noticeably smoother now.",
 		img: "/posts/post2.jpg",
 		user: {
-			username: "ai_enthusiast",
+			username: "perf_hacker",
 			profileImg: "/avatars/boy3.jpg",
 			fullName: "Jessica Liu",
 		},
 		comments: [
 			{
 				_id: "1",
-				text: "Which AI tool are you using? Sounds very promising!",
+				text: "Nice! What did you use to find it — Chrome DevTools or Node profiler?",
 				user: {
 					username: "curious_dev",
 					profileImg: "/avatars/boy5.jpg",
@@ -189,7 +189,7 @@ export const POSTS = [
 	},
 	{
 		_id: "9",
-		text: "Built a machine learning model for code completion. 93% accuracy on predicting the next line of code! 🧠 The future of IDE assistance is bright.",
+		text: "Built a small autocomplete prototype for my notes app. Even a basic trie-based approach made typing feel much faster.",
 		img: "/posts/post1.jpg",
 		user: {
 			username: "ml_coder",
@@ -199,7 +199,7 @@ export const POSTS = [
 		comments: [
 			{
 				_id: "1",
-				text: "That's impressive! What dataset did you train on?",
+				text: "Nice! Did you try a trie or just prefix matching?",
 				user: {
 					username: "data_scientist",
 					profileImg: "/avatars/boy6.jpg",
