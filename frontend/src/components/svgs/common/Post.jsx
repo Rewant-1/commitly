@@ -86,11 +86,9 @@ const Post = ({ post }) => {
       }
     },
     onSuccess: (updatedLikes) => {
-      // Update all posts lists in cache (any feed)
       queryClient.setQueriesData({ queryKey: ["posts"] }, (old) =>
         mapPostsQueryData(old, (p) => (p?._id === post?._id ? { ...p, likes: updatedLikes } : p))
       );
-      // Refresh RecentLikes for this user
       queryClient.invalidateQueries({ queryKey: ["starredPosts", authUser?._id] });
     },
     onError: (error) => {
@@ -106,7 +104,6 @@ const Post = ({ post }) => {
       return data; // { bookmarked: boolean }
     },
     onSuccess: ({ bookmarked }) => {
-      // Update authUser cache
       queryClient.setQueryData(["authUser"], (prev) => {
         if (!prev) return prev;
         const set = new Set(prev.bookmarkedPosts?.map(String) || []);
@@ -114,7 +111,6 @@ const Post = ({ post }) => {
         return { ...prev, bookmarkedPosts: Array.from(set) };
       });
 
-      // Update all posts lists in cache
       queryClient.setQueriesData({ queryKey: ["posts"] }, (old) =>
         mapPostsQueryData(old, (p) => (p?._id === post?._id ? { ...p, bookmarked } : p))
       );
@@ -161,7 +157,6 @@ const Post = ({ post }) => {
       return { previousPostsQueries };
     },
     onSuccess: ({ reposted, reposts }) => {
-      // Update authUser cache (track which posts user has reposted)
       queryClient.setQueryData(["authUser"], (prev) => {
         if (!prev) return prev;
         const set = new Set(prev.retweetedPosts?.map(String) || []);

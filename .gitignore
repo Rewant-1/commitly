@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Generated perf reports
+lighthouse-*.html
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

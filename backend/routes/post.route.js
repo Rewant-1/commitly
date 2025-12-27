@@ -1,4 +1,3 @@
-// Post-related routes - feed, create, like, comment, bookmark, repost functionality
 import express from "express";
 import { protectRoute } from "../middleware/protectRoute.js";
 import { validateRequest } from "../middleware/validateRequest.js";
@@ -27,18 +26,14 @@ import {
 
 const router = express.Router();
 
-// All post routes require authentication
-// Feed routes
-router.get("/all", protectRoute, validateRequest({ query: feedQuerySchema }), getAllPosts);              // Main feed
-router.get("/following", protectRoute, validateRequest({ query: feedQuerySchema }), getFollowingPosts);  // Following feed
+router.get("/all", protectRoute, validateRequest({ query: feedQuerySchema }), getAllPosts);
+router.get("/following", protectRoute, validateRequest({ query: feedQuerySchema }), getFollowingPosts);
 
-// User-specific post collections
-router.get("/likes/:id", protectRoute, validateRequest({ params: userIdParamsSchema, query: feedQuerySchema }), getLikedPosts);      // Posts user liked
+router.get("/likes/:id", protectRoute, validateRequest({ params: userIdParamsSchema, query: feedQuerySchema }), getLikedPosts);
 router.get("/bookmarks/:id", protectRoute, validateRequest({ params: userIdParamsSchema, query: feedQuerySchema }), getBookmarkedPosts);
 router.get("/reposts/:id", protectRoute, validateRequest({ params: userIdParamsSchema, query: feedQuerySchema }), getRepostedPosts);
-router.get("/user/:username", protectRoute, validateRequest({ params: usernameParamsSchema, query: feedQuerySchema }), getUserPosts);  // User's posts
+router.get("/user/:username", protectRoute, validateRequest({ params: usernameParamsSchema, query: feedQuerySchema }), getUserPosts);
 
-// Post management
 router.post("/create", protectRoute, validateRequest({ body: createPostBodySchema }), createPost);
 router.post("/like/:id", protectRoute, validateRequest({ params: postIdParamsSchema }), likeUnlikePost);
 router.post("/bookmark/:id", protectRoute, validateRequest({ params: postIdParamsSchema }), bookmarkTogglePost);

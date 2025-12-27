@@ -253,7 +253,6 @@ export const getUserPosts = async (req, res) => {
 	}
 };
 
-// Toggle bookmark on a post for the current user
 export const bookmarkTogglePost = async (req, res) => {
 	try {
 		const userId = req.user._id;

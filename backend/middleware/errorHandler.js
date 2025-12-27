@@ -1,8 +1,8 @@
 export default function errorHandler(err, req, res, next) {
-  // Log full error in server logs
+  // server logs
   console.error("Error:", err);
 
-  // Known validation errors
+  // mongoose validation
   if (err.name === "ValidationError") {
     return res.status(400).json({
       error: "ValidationError",
@@ -11,7 +11,7 @@ export default function errorHandler(err, req, res, next) {
     });
   }
 
-  // CastError for invalid ObjectId
+  // bad ObjectId
   if (err.name === "CastError") {
     return res.status(400).json({
       error: "BadRequest",
@@ -19,7 +19,7 @@ export default function errorHandler(err, req, res, next) {
     });
   }
 
-  // Custom error with status
+  // custom status
   if (err.status) {
     return res.status(err.status).json({
       error: err.code || "Error",
@@ -27,6 +27,5 @@ export default function errorHandler(err, req, res, next) {
     });
   }
 
-  // Fallback
   res.status(500).json({ error: "InternalServerError", message: "Internal Server Error" });
 }
