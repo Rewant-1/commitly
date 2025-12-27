@@ -1,10 +1,13 @@
 // Posts component - displays different types of post feeds based on feedType
 import Post from "./Post";
 import PostSkeleton from "../../skeletons/PostSkeleton";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef } from "react";
 
 const Posts = ({ feedType, username, userId }) => {
+	const LIMIT = 10;
+	const loadMoreRef = useRef(null);
+
 	// Determine API endpoint based on feed type
 	const getPostEndpoint = () => {
 		switch (feedType) {
@@ -27,41 +30,70 @@ const Posts = ({ feedType, username, userId }) => {
 
 	const POST_ENDPOINT = getPostEndpoint();
 
+	const enabled =
+		(feedType === "likes" || feedType === "bookmarks" || feedType === "reposts")
+			? Boolean(userId)
+			: feedType === "posts"
+			? Boolean(username)
+			: true;
+
 	// Fetch posts using React Query for caching and loading states
 	const {
-		data: posts,
+		data,
 		isLoading,
-		refetch,
 		isRefetching,
-	} = useQuery({
-		queryKey: ["posts", { feedType, username, userId, endpoint: POST_ENDPOINT }],
-		queryFn: async () => {
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+	} = useInfiniteQuery({
+		queryKey: ["posts", { feedType, username, userId, endpoint: POST_ENDPOINT, limit: LIMIT }],
+		enabled,
+		initialPageParam: 1,
+		queryFn: async ({ pageParam }) => {
 			try {
-				const res = await fetch(POST_ENDPOINT);
+				const url = new URL(POST_ENDPOINT, window.location.origin);
+				url.searchParams.set("page", String(pageParam));
+				url.searchParams.set("limit", String(LIMIT));
+
+				const res = await fetch(url.pathname + url.search);
 				const data = await res.json();
-
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
-
+				if (!res.ok) throw new Error(data.error || "Something went wrong");
 				return data;
 			} catch (error) {
 				throw new Error(error);
 			}
 		},
-		// Only fetch when required params are available
-		enabled:
-			(feedType === "likes" || feedType === "bookmarks" || feedType === "reposts")
-				? Boolean(userId)
-				: feedType === "posts"
-				? Boolean(username)
-				: true,
+		getNextPageParam: (lastPage, allPages) => {
+			if (!Array.isArray(lastPage)) return undefined;
+			if (lastPage.length < LIMIT) return undefined;
+			return allPages.length + 1;
+		},
 	});
 
-	// Refetch posts when feed parameters change
+	const posts = useMemo(() => {
+		const pages = data?.pages || [];
+		return pages.flatMap((p) => (Array.isArray(p) ? p : []));
+	}, [data]);
+
 	useEffect(() => {
-		refetch();
-	}, [POST_ENDPOINT, feedType, username, userId, refetch]);
+		if (!enabled) return;
+		if (!loadMoreRef.current) return;
+		if (!hasNextPage) return;
+
+		const element = loadMoreRef.current;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const [entry] = entries;
+				if (entry?.isIntersecting && hasNextPage && !isFetchingNextPage) {
+					fetchNextPage();
+				}
+			},
+			{ root: null, rootMargin: "600px", threshold: 0 }
+		);
+
+		observer.observe(element);
+		return () => observer.disconnect();
+	}, [enabled, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
 	return (
 		<>
@@ -85,6 +117,13 @@ const Posts = ({ feedType, username, userId }) => {
 					{posts.map((post) => (
 						<Post key={post?._id} post={post} />
 					))}
+					{/* Infinite scroll sentinel */}
+					<div ref={loadMoreRef} />
+					{isFetchingNextPage && (
+						<div className='flex flex-col justify-center'>
+							<PostSkeleton />
+						</div>
+					)}
 				</div>
 			)}
 		</>

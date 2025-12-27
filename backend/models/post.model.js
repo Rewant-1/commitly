@@ -50,6 +50,9 @@ const postSchema = new mongoose.Schema(
 	{ timestamps: true } // Add createdAt and updatedAt automatically
 );
 
+postSchema.index({ createdAt: -1 });
+postSchema.index({ user: 1, createdAt: -1 });
+
 const Post = mongoose.model("Post", postSchema);
 
 export default Post;

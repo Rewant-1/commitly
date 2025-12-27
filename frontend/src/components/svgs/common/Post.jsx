@@ -11,6 +11,20 @@ import toast from "../../../utils/toast";
 import LoadingSpinner from "./LoadingSpinner";
 import { formatPostDate } from "../../../utils/date/index";
 
+const mapPostsQueryData = (data, mapper) => {
+  if (!data) return data;
+  if (Array.isArray(data)) {
+    return data.map(mapper);
+  }
+  if (typeof data === "object" && Array.isArray(data.pages)) {
+    return {
+      ...data,
+      pages: data.pages.map((page) => (Array.isArray(page) ? page.map(mapper) : page)),
+    };
+  }
+  return data;
+};
+
 const Post = ({ post }) => {
   const [comment, setComment] = useState("");
   const { data: authUser } = useQuery({
@@ -73,10 +87,9 @@ const Post = ({ post }) => {
     },
     onSuccess: (updatedLikes) => {
       // Update all posts lists in cache (any feed)
-      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) => {
-        if (!Array.isArray(old)) return old;
-        return old.map((p) => (p?._id === post?._id ? { ...p, likes: updatedLikes } : p));
-      });
+      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) =>
+        mapPostsQueryData(old, (p) => (p?._id === post?._id ? { ...p, likes: updatedLikes } : p))
+      );
       // Refresh RecentLikes for this user
       queryClient.invalidateQueries({ queryKey: ["starredPosts", authUser?._id] });
     },
@@ -102,10 +115,9 @@ const Post = ({ post }) => {
       });
 
       // Update all posts lists in cache
-      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) => {
-        if (!Array.isArray(old)) return old;
-        return old.map((p) => (p?._id === post?._id ? { ...p, bookmarked } : p));
-      });
+      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) =>
+        mapPostsQueryData(old, (p) => (p?._id === post?._id ? { ...p, bookmarked } : p))
+      );
       queryClient.invalidateQueries({ queryKey: ["starredPosts", authUser?._id] });
     },
     onError: (e) => toast.error(e.message),
@@ -120,27 +132,33 @@ const Post = ({ post }) => {
     },
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ["posts"] });
-      const previousPosts = queryClient.getQueryData(["posts"]);
-      // Optimistically toggle repost + adjust count
-      queryClient.setQueryData(["posts"], (old) => {
-        if (!Array.isArray(old)) return old;
-        return old.map((p) => {
+
+      const previousPostsQueries = queryClient.getQueriesData({ queryKey: ["posts"] });
+
+      // Optimistically toggle repost + adjust count across all feeds
+      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) =>
+        mapPostsQueryData(old, (p) => {
           if (p?._id !== post?._id) return p;
-          const currentlyReposted = Array.isArray(p.reposts)
-            ? p.reposts.some(r => String(r) === String(authUser?._id))
-            : (p.reposted || false);
-          let newCount;
-          if (Array.isArray(p.reposts)) {
-            newCount = currentlyReposted ? p.reposts.length - 1 : p.reposts.length + 1;
-          } else if (typeof p.reposts === 'number') {
-            newCount = currentlyReposted ? Math.max(0, p.reposts - 1) : p.reposts + 1;
-          } else {
-            newCount = currentlyReposted ? 0 : 1;
-          }
-          return { ...p, reposted: !currentlyReposted, reposts: newCount };
-        });
-      });
-      return { previousPosts };
+
+          const currentUserId = authUser?._id;
+          const currentlyReposted = Boolean(
+            Array.isArray(p.reposts)
+              ? p.reposts.some((r) => String(r) === String(currentUserId))
+              : p.reposted
+          );
+
+          const baseCount = Array.isArray(p.reposts)
+            ? p.reposts.length
+            : typeof p.reposts === "number"
+            ? p.reposts
+            : 0;
+
+          const nextCount = currentlyReposted ? Math.max(0, baseCount - 1) : baseCount + 1;
+          return { ...p, reposted: !currentlyReposted, reposts: nextCount };
+        })
+      );
+
+      return { previousPostsQueries };
     },
     onSuccess: ({ reposted, reposts }) => {
       // Update authUser cache (track which posts user has reposted)
@@ -153,16 +171,17 @@ const Post = ({ post }) => {
 
       const normalizedReposts = Array.isArray(reposts) ? reposts.length : reposts;
 
-      queryClient.setQueryData(["posts"], (old) => {
-        if (!Array.isArray(old)) return old;
-        return old.map((p) => (
+      queryClient.setQueriesData({ queryKey: ["posts"] }, (old) =>
+        mapPostsQueryData(old, (p) =>
           p?._id === post?._id ? { ...p, reposted, reposts: normalizedReposts } : p
-        ));
-      });
+        )
+      );
     },
     onError: (e, _vars, context) => {
-      if (context?.previousPosts) {
-        queryClient.setQueryData(["posts"], context.previousPosts);
+      if (context?.previousPostsQueries) {
+        context.previousPostsQueries.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
       }
       toast.error(e.message);
     },
