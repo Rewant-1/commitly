@@ -230,14 +230,6 @@ npm start
 
 ---
 
-## License
 
-MIT
 
----
 
-<div align="center">
-  
-**Built with ☕ and mass terminal aesthetics**
-
-</div>
