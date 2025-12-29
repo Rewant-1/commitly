@@ -1,187 +1,243 @@
-# commitly — Terminal-Inspired Social Platform
+# commitly — Developer Social Platform
 
-![React](https://img.shields.io/badge/React-18.2.0-blue?style=for-the-badge&logo=react)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![TanStack Query](https://img.shields.io/badge/TanStack%20Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge&logo=node.js)
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-green?style=for-the-badge&logo=mongodb)
-![Tailwind](https://img.shields.io/badge/TailwindCSS-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![daisyUI](https://img.shields.io/badge/daisyUI-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)
+<div align="center">
 
-A developer-themed social app with a terminal-style UI. Built with React (Vite), Express, and MongoDB.
+![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=flat-square&logo=react)
+![Node.js](https://img.shields.io/badge/Node.js-22.x-339933?style=flat-square&logo=node.js)
+![MongoDB](https://img.shields.io/badge/MongoDB-8.x-47A248?style=flat-square&logo=mongodb)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-06B6D4?style=flat-square&logo=tailwindcss)
 
-## Live Demo
+**A terminal-themed social platform for developers. Think Twitter, but for people who prefer `git commit -m` over tweets.**
 
-https://commitly-152b.onrender.com
+[Live Demo](https://commitly-152b.onrender.com) · [Features](#features) · [Tech Stack](#tech-stack) · [Getting Started](#getting-started)
 
-## What you can do
+</div>
 
-**Core**
-- Signup/login (JWT stored in httpOnly cookies)
-- Create/delete posts, comment, like
-- Bookmarks + reposts
-- Notifications (follow/like/repost)
+---
 
-**UX / performance**
-- Terminal-inspired UI (monospace + CLI-ish styling)
-- Paginated feeds (`page`/`limit`) + infinite scrolling on the client
-- Cloudinary uploads (profile + post media)
-- Client caching + invalidation with TanStack Query
+## Why I Built This
 
-**Quality**
-- Zod request validation on backend (body/params/query)
-- MongoDB indexes for common feed/notification queries
-- CI via GitHub Actions (build + lint)
+I wanted a social platform that actually feels like home for developers—terminal aesthetics, git-inspired interactions, and fast performance. Instead of "What's happening?", you get `$ git commit -m "your thoughts"`.
+
+## Features
+
+### Core Functionality
+- **Authentication** — JWT-based auth with httpOnly cookies (no localStorage token exposure)
+- **Posts** — Create, delete, like, comment, bookmark, and repost
+- **Social Graph** — Follow/unfollow users, suggested users algorithm
+- **Notifications** — Real-time notifications for likes, follows, and reposts
+- **Profiles** — Editable profiles with Cloudinary image uploads
+
+### Performance
+- **Paginated Feeds** — Server-side pagination (`page`/`limit` params) with infinite scroll on client
+- **Optimistic Updates** — UI updates immediately while API calls happen in background
+- **Code Splitting** — React lazy loading + Vite manual chunks (react, router, query bundles)
+- **Asset Caching** — Static assets cached for 1 year with immutable headers
+- **Request Validation** — Zod schemas validate body, params, and query before hitting controllers
+
+### Lighthouse Scores (Desktop, Median of 3 Runs)
+| Metric | Score |
+|--------|-------|
+| Performance | **99** |
+| Accessibility | **100** |
+| Best Practices | **96** |
+| SEO | **91** |
+| FCP | ≈532ms |
+| LCP | ≈600ms |
+| CLS | 0.006 |
+
+### API Throughput (Autocannon — 20 connections, 15s)
+- **≈78.67 req/s** throughput
+- **p50 latency: ≈205ms**, p97.5: ≈597ms
+
+---
 
 ## Tech Stack
 
-**Frontend**: React, Vite, React Router, TanStack Query, TailwindCSS, daisyUI
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | React 18, Vite, React Router v7, TanStack Query v5, TailwindCSS, daisyUI |
+| **Backend** | Node.js, Express, MongoDB, Mongoose, JWT, bcryptjs |
+| **Validation** | Zod (request body/params/query validation) |
+| **Media** | Cloudinary (profile pics, cover images, post images) |
+| **Security** | Helmet, httpOnly cookies, password hashing |
+| **Performance** | Compression, static asset caching, lazy loading |
+| **CI/CD** | GitHub Actions (build + lint on push/PR) |
 
-**Backend**: Node.js, Express, MongoDB, Mongoose, Zod, JWT, bcryptjs, Cloudinary
+---
 
 ## Project Structure
 
 ```
 commitly/
 ├── backend/
-│   ├── controllers/
-│   ├── db/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   └── server.js
-└── frontend/
-    ├── public/
-    ├── src/
-    ├── package.json
-    └── vite.config.js
+│   ├── controllers/      # Route handlers (auth, posts, users, notifications)
+│   ├── middleware/       # protectRoute, validateRequest, errorHandler
+│   ├── models/           # Mongoose schemas with indexes
+│   ├── routes/           # Express route definitions
+│   ├── validation/       # Zod schemas for request validation
+│   └── server.js         # Entry point with security/compression middleware
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # Reusable UI (Post, Sidebar, RightPanel, Skeletons)
+│   │   ├── context/      # AuthContext with useAuth hook
+│   │   ├── hooks/        # Custom hooks (useFollow, useUpdateUserProfile)
+│   │   ├── pages/        # Page components (Home, Profile, Auth, Notifications)
+│   │   └── utils/        # Helper functions (date formatting, toast)
+│   └── vite.config.js    # Build config with code splitting
+│
+└── .github/workflows/    # CI pipeline
 ```
 
-## Getting Started (local)
+---
+
+## Getting Started
 
 ### Prerequisites
-- Node.js **22.x** (recommended; matches CI)
+- Node.js 22.x (matches CI)
 - MongoDB (local or Atlas)
+- Cloudinary account (free tier works)
 
 ### Setup
 
-1) Install deps
-
+1. **Clone and install**
 ```bash
+git clone https://github.com/Rewant-1/commitly.git
+cd commitly
 npm install
 npm install --include=dev --prefix frontend
 ```
 
-2) Add env
-
-Create a `.env` file in the project root:
-
+2. **Environment variables** — Create `.env` in root:
 ```env
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
+MONGO_URI=mongodb+srv://...
+JWT_SECRET=your-secret-key
 NODE_ENV=development
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
 ```
 
-3) (Optional) Seed data
-
+3. **Seed sample data (optional)**
 ```bash
 npm run seed
 ```
 
-4) Run backend + frontend
+4. **Run development servers**
+```bash
+# Terminal 1 — Backend
+npm start
 
-Backend (from root):
+# Terminal 2 — Frontend  
+cd frontend && npm run dev
+```
 
+App runs at `http://localhost:5173`
+
+---
+
+## API Reference
+
+All routes except `/api/health` require authentication (JWT in httpOnly cookie).
+
+### Auth
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/signup` | Create account |
+| POST | `/api/auth/login` | Login |
+| POST | `/api/auth/logout` | Logout (clears cookie) |
+| GET | `/api/auth/me` | Get current user |
+
+### Posts
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/posts/all?page=1&limit=10` | All posts (paginated) |
+| GET | `/api/posts/following?page=1&limit=10` | Following feed |
+| GET | `/api/posts/user/:username` | User's posts |
+| GET | `/api/posts/likes/:id` | User's liked posts |
+| GET | `/api/posts/bookmarks/:id` | User's bookmarks |
+| POST | `/api/posts/create` | Create post |
+| POST | `/api/posts/like/:id` | Like/unlike |
+| POST | `/api/posts/bookmark/:id` | Bookmark toggle |
+| POST | `/api/posts/comment/:id` | Add comment |
+| DELETE | `/api/posts/:id` | Delete post |
+
+### Users
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/users/profile/:username` | Get profile |
+| GET | `/api/users/suggested` | Suggested users |
+| POST | `/api/users/follow/:id` | Follow/unfollow |
+| POST | `/api/users/update` | Update profile |
+
+### Notifications
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/notifications` | Get notifications |
+| DELETE | `/api/notifications` | Clear all |
+
+---
+
+## Performance Optimizations
+
+1. **Frontend**
+   - Lazy-loaded routes with React.lazy + Suspense
+   - TanStack Query for caching and background refetching
+   - Intersection Observer for infinite scroll (no scroll event listeners)
+   - Code splitting: separate chunks for react, router, and query
+
+2. **Backend**
+   - MongoDB indexes on `createdAt` and `user` fields for feed queries
+   - Compression middleware (gzip)
+   - Static asset caching with 1-year max-age
+   - Zod validation short-circuits invalid requests before DB calls
+
+3. **Security**
+   - Helmet for security headers
+   - JWT stored in httpOnly cookies (not localStorage)
+   - Password hashing with bcrypt (10 rounds)
+   - Request body limit (5MB) to prevent payload attacks
+
+---
+
+## Deployment
+
+The app is deployed on [Render](https://render.com) with:
+- Backend serving the built frontend (`frontend/dist`)
+- MongoDB Atlas for database
+- Cloudinary for media storage
+
+Build command for Render:
+```bash
+npm run build
+```
+
+Start command:
 ```bash
 npm start
 ```
 
-Frontend (new terminal):
+---
 
-```bash
-cd frontend
-npm run dev
-```
+## Future Improvements
 
-App: `http://localhost:5173`
+- [ ] WebSocket for real-time notifications
+- [ ] Search functionality
+- [ ] Direct messages
+- [ ] Dark/light theme toggle
+- [ ] Rate limiting middleware
 
-## API (quick reference)
+---
 
-Most API routes require auth (httpOnly cookie) — `GET /api/health` is public.
+## License
 
-**Auth**
-- `POST /api/auth/signup`
-- `POST /api/auth/login`
-- `POST /api/auth/logout`
-- `GET /api/auth/me`
+MIT
 
-**Posts**
-- `GET /api/posts/all?page=1&limit=10`
-- `GET /api/posts/following?page=1&limit=10`
-- `GET /api/posts/user/:username?page=1&limit=10`
-- `GET /api/posts/likes/:id?page=1&limit=10`
-- `GET /api/posts/bookmarks/:id?page=1&limit=10`
-- `GET /api/posts/reposts/:id?page=1&limit=10`
-- `POST /api/posts/create`
-- `POST /api/posts/like/:id`
-- `POST /api/posts/bookmark/:id`
-- `POST /api/posts/repost/:id`
-- `POST /api/posts/comment/:id`
-- `DELETE /api/posts/:id`
+---
 
-**Users**
-- `GET /api/users/profile/:username`
-- `GET /api/users/suggested`
-- `POST /api/users/follow/:id`
-- `POST /api/users/update`
+<div align="center">
+  
+**Built with ☕ and mass terminal aesthetics**
 
-**Notifications**
-- `GET /api/notifications`
-- `DELETE /api/notifications`
-
-**Health**
-- `GET /api/health`
-
-## Metrics (for resume)
-
-If you want metrics that are easy to defend in interviews, generate them from reproducible tools and keep the reports.
-
-### Lighthouse (performance)
-
-Run on the deployed URL (desktop preset shown):
-
-```bash
-npx lighthouse https://commitly-152b.onrender.com --preset=desktop --output html --output-path lighthouse-desktop.html
-```
-
-Run 3 times and use the median.
-
-**Latest results (desktop, median of 3 runs — Dec 27, 2025)**
-
-- Scores: Performance **99**, Accessibility **100**, Best Practices **96**, SEO **91**
-- Core metrics: **FCP ~532ms**, **LCP ~600ms**, **TBT 0ms**, **CLS 0.006**, **Speed Index ~1161ms**
-
-### API throughput (basic)
-
-Use a public endpoint for benchmarking:
-
-```bash
-npx autocannon -c 20 -d 15 https://commitly-152b.onrender.com/api/health
-```
-
-**Latest results (valid runs median — 20 connections, 15s)**
-
-- Throughput: **~78.67 req/s**
-- Latency: **p50 ~205ms**, **p97.5 ~597ms**
-
-## Testing
-
-Manual testing flows covered:
-- Auth: signup/login/logout + protected routes
-- Posts: create/delete/like/bookmark/repost/comment
-- Feeds: all/following/user timeline + pagination
-- Profile: update profile + follow/unfollow + suggestions
-- Notifications: fetch + clear
+</div>
